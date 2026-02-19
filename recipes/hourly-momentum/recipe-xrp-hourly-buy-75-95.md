@@ -65,6 +65,22 @@ Buys the high-probability XRP side twice per hour using aggressive fills.
 3. Set target odds band to 75-95 and bet size to 60 USD.
 4. Ensure hourly exit recipes are enabled if you expect short holds.
 
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: XRP Hourly Buy (75-95 Odds)
+- Schedule: 42,47 * * * *
+- Timezone: UTC (or my scheduler default)
+- Task: Buy the XRP hourly Up/Down side in the 75-95% odds band.
+- Amount/rules: Bet size 60 USD; series context 10123; skip and log when no side qualifies.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 
 - security.permissions: read-market-data, place-order, read-position, write-run-artifacts.

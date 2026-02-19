@@ -65,6 +65,22 @@ Executes an aggressive all-position unwind near the top of each hour.
 3. Confirm aggressive sell behavior is acceptable for your risk profile.
 4. Keep post-run logs enabled for residual inventory checks.
 
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: Hourly Sell All Positions
+- Schedule: 58 * * * *
+- Timezone: UTC (or my scheduler default)
+- Task: Sell all open positions aggressively and redeem expired positions each run.
+- Amount/rules: No confirmation prompt; log residual positions and partial fills.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 
 - security.permissions: read-position, place-order, redeem-position, write-run-artifacts.

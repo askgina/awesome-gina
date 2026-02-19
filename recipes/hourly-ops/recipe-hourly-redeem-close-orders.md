@@ -68,6 +68,22 @@ Performs a cleanup pass every hour to normalize exposure and clear stale orders.
 3. Enable no-confirmation mode only for trusted operator environments.
 4. Review post-run logs for partial completion states.
 
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: Hourly Redeem and Close Orders
+- Schedule: 30 * * * *
+- Timezone: UTC (or my scheduler default)
+- Task: Redeem all redeemable positions, sell remaining shares, and cancel open limit orders.
+- Amount/rules: No confirmation prompt; return redeemed, sold, canceled, and leftover counts.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 
 - security.permissions: read-position, redeem-position, place-order, cancel-order, write-run-artifacts.

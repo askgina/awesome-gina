@@ -65,6 +65,22 @@ Buys the high-probability ETH side twice per hour using aggressive fills.
 3. Set target odds band to 75-95 and bet size to 110 USD.
 4. Ensure hourly exit recipes are enabled if you expect short holds.
 
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: ETH Hourly Buy (75-95 Odds)
+- Schedule: 45,49 * * * *
+- Timezone: UTC (or my scheduler default)
+- Task: Buy the ETH hourly Up/Down side in the 75-95% odds band.
+- Amount/rules: Bet size 110 USD; skip and log when neither side qualifies.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 
 - security.permissions: read-market-data, place-order, read-position, write-run-artifacts.

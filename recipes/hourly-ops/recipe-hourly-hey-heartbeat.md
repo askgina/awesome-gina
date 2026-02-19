@@ -60,6 +60,22 @@ Sends a minimal heartbeat message for scheduler and channel liveness checks.
 2. Bind a destination channel intended for heartbeat/test traffic.
 3. Keep log retention enabled for liveness trend checks.
 
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: Hourly Hey Heartbeat
+- Schedule: 52 * * * *
+- Timezone: Europe/London
+- Task: Send the message hey to the configured heartbeat destination every run.
+- Amount/rules: Log success or failure for each send attempt.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 
 - security.permissions: send-message, write-run-artifacts.
