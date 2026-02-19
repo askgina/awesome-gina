@@ -157,6 +157,7 @@ Rules:
 - Keep summary <= 140 chars.
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
+- If information is missing, offer constrained options and ask me to pick one.
 
 Interaction format each round:
 1) "What I understood" (short)
@@ -168,16 +169,20 @@ Required fields to complete:
 - id, name, type, summary, category
 - repo or homepage
 - license, status, verification.tier
-- permissions, tags
+- verification.lastVerifiedAt when verification.tier = verified
+- security.permissions, tags
+- evidence.setup, evidence.example
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
+- interface summary + setup + side effects + permission scope (for skill/filesystem)
 - skill name/description + SKILL.md path (+ optional compatibility/allowed tools) for skill
-- setup + evidence
 
 Once complete, output exactly:
 1) Canonical JSON object
 2) Markdown entry (frontmatter + body)
 3) Preflight checklist for PR readiness
+
+If anything is missing, include a `Missing Info` block and stop before finalizing.
 
 My initial notes:
 <PASTE NOTES HERE>
