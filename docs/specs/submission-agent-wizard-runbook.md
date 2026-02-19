@@ -36,6 +36,14 @@ Reference anchors:
 - `security.permissions`
 - `tags`
 
+For `workflow` submissions, also collect source layout details:
+
+- workflow folder path under `workflows/<workflow-folder>/`
+- colocated `README.md`
+- `references/<artifact>@latest.ts` (artifact filename must not start with `workflow-`)
+- optional additional docs under `references/` for deeper implementation details
+- optional layout conventions should follow `skills/workflows/SKILL.md`
+
 For `strategy`, `recipe`, and `workflow`, require:
 
 - `trigger`
@@ -125,6 +133,7 @@ Quality rules:
 - Stable slug/id in kebab-case?
 - Category path (example: `strategies/alerts` or `recipes/alerts`)?
 - Repo/homepage and license confirmed?
+- For workflow submissions, does source layout match `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`?
 
 ## Final Output Contract
 
@@ -157,6 +166,8 @@ Rules:
 - Keep summary <= 140 chars.
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
+- For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
+- For workflow layout conventions, use `skills/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 
 Interaction format each round:
@@ -172,6 +183,7 @@ Required fields to complete:
 - verification.lastVerifiedAt when verification.tier = verified
 - security.permissions, tags
 - evidence.setup, evidence.example
+- workflow source layout (for workflow): `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
 - interface summary + setup + side effects + permission scope (for skill/filesystem)
@@ -194,3 +206,4 @@ My initial notes:
 - Final output conforms to the schema/template files above.
 - Prompt never routes users into unsupported submission types.
 - Strategy and recipe submissions include transition logic when relevant.
+- Workflow submissions enforce the colocated directory pattern and path references resolve.

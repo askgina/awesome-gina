@@ -50,6 +50,8 @@ Rules:
 - Keep summary <= 140 chars.
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
+- For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
+- For workflow layout conventions, use `skills/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 
 Interaction format each round:
@@ -65,6 +67,7 @@ Required fields to complete:
 - verification.lastVerifiedAt when verification.tier = verified
 - security.permissions, tags
 - evidence.setup, evidence.example
+- workflow source layout (for workflow): `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
 - interface summary + setup + side effects + permission scope (for skill/filesystem)
@@ -85,5 +88,6 @@ My initial notes:
 
 - Explicit permissions and side effects.
 - Reproducible setup and evidence.
+- Workflow submissions keep docs/artifacts under `workflows/<workflow-folder>/` with runnable source in `references/`.
 - No secret leakage.
 - Missing fields listed clearly before finalization.

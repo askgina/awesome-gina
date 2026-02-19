@@ -88,6 +88,15 @@ Other docs should reference this section instead of redefining type semantics.
   - reproducible setup in `evidence.setup`
   - explicit side effects in `capability.sideEffects` (if any)
 
+## Source Layout Guidance
+
+- `workflow` submissions should keep docs and runnable artifacts colocated:
+  - `workflows/<workflow-folder>/README.md`
+  - `workflows/<workflow-folder>/references/<artifact>@latest.ts`
+  - optional additional docs under `workflows/<workflow-folder>/references/` for deep implementation notes
+- Workflow artifact filenames must not start with `workflow-`.
+- For optional directory conventions, align with the workflow skill guidance in `skills/workflows/SKILL.md`.
+
 ### Skill Content Addendum (for `type: skill`)
 
 - Include a `Skill Spec` section in the markdown body (see `skill-entry-template.md`).
@@ -124,6 +133,7 @@ Manual review policy checks in v0 (not fully automated yet):
 - `id` should be globally unique.
 - `tags` should have a max count of 12.
 - `security.permissions` should be explicit; no wildcard strings.
+- `workflow` submissions should follow the source layout guidance above and keep path references valid.
 
 ## Why This Is Small
 
