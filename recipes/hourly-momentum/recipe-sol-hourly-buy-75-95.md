@@ -1,0 +1,98 @@
+---
+id: recipe-sol-hourly-buy-75-95
+name: SOL Hourly Buy (75-95 Odds)
+type: recipe
+summary: Buy SOL hourly Up/Down winner at 75-95% odds and hand off to hourly exit automations.
+category: recipes/hourly-momentum
+status: active
+owner: askgina
+repo: https://github.com/askgina/awesome-gina
+license: NOASSERTION
+verification:
+  tier: unverified
+  lastVerifiedAt: null
+security:
+  permissions:
+    - read-market-data
+    - place-order
+    - read-position
+    - write-run-artifacts
+evidence:
+  setup: recipes/hourly-momentum/recipe-sol-hourly-buy-75-95.md#setup
+  example: recipes/hourly-momentum/recipe-sol-hourly-buy-75-95.md#evidence
+tags: [sol, hourly, momentum, buy, odds-band]
+---
+
+# SOL Hourly Buy (75-95 Odds)
+
+Buys the high-probability SOL side twice per hour using aggressive fills.
+
+## What it does
+
+- Evaluates SOL Up/Down market odds at minute 45 and minute 49 each hour.
+- Buys the side in the 75-95% band with a fixed 70 USD notional.
+- Uses series 10122 context from source notes.
+
+## Capability contract
+
+- Trigger: cron 45,49 * * * *.
+- Inputs:
+  - market: SOL hourly Up/Down market (series 10122)
+  - targetOddsBand: 75-95%
+  - betSizeUsd: 70
+  - fillMode: aggressive
+- Outputs:
+  - placed order receipt when a qualifying side exists
+  - skip reason when no side is in range
+- Side effects:
+  - submits buy order(s) on qualifying side
+  - writes run/execution logs
+- Failure modes:
+  - neither side in 75-95% band
+  - stale odds at evaluation time
+  - order rejection or insufficient balance
+- Strategy state transitions:
+  - idle -> evaluating at trigger minute
+  - evaluating -> buying when one side is in target band
+  - evaluating -> skipped when no side qualifies
+  - buying -> open-position on accepted order
+  - open-position -> exited by downstream hourly exit recipes
+
+## Setup
+
+1. Configure the recipe scheduler for minute 45 and minute 49 each hour.
+2. Bind the SOL hourly Up/Down market source (series 10122 where applicable).
+3. Set target odds band to 75-95 and bet size to 70 USD.
+4. Ensure hourly exit recipes are enabled if you expect short holds.
+
+## Quick Copy Prompt (Ask Gina)
+
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: SOL Hourly Buy (75-95 Odds)
+- Execute with agent: predictions
+- Schedule: 45,49 * * * *
+- Timezone: UTC (or my scheduler default)
+- Task: Buy the SOL hourly Up/Down side in the 75-95% odds band.
+- Amount/rules: Bet size 70 USD; series context 10122; skip and log when no side qualifies.
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
+## Security and permissions
+
+- security.permissions: read-market-data, place-order, read-position, write-run-artifacts.
+
+## Evidence
+
+- Source notes: gina-recipes.md (user-provided notes).
+- Run count observed in notes: 394.
+- Created date from notes: February 10, 2026.
+
+## Backlinks
+
+- [Category](../../docs/categories/recipes.md)
+- [Awesome Gina Index](../../README.md)

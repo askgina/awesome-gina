@@ -53,6 +53,7 @@ Rules:
 - For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
 - For workflow layout conventions, use `skills/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
+- For recipe submissions, include a `Quick Copy Prompt (Ask Gina)` section with a fenced `text` code block that begins with `promptText:` and includes `- Execute with agent: <gina (spot) | predictions | perps>` sourced from `lib/ai/agents/index.ts`.
 
 Interaction format each round:
 1) "What I understood" (short)
@@ -70,6 +71,7 @@ Required fields to complete:
 - workflow source layout (for workflow): `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
+- quick-copy `promptText` block with enum execution agent line (for recipe)
 - interface summary + setup + side effects + permission scope (for skill/filesystem)
 - skill name/description + SKILL.md path (+ optional compatibility/allowed tools) for skill
 
@@ -88,6 +90,7 @@ My initial notes:
 
 - Explicit permissions and side effects.
 - Reproducible setup and evidence.
+- Recipe submissions include a noob-friendly `Quick Copy Prompt (Ask Gina)` `promptText` block with an explicit enum execution agent line sourced from `lib/ai/agents/index.ts`.
 - Workflow submissions keep docs/artifacts under `workflows/<workflow-folder>/` with runnable source in `references/`.
 - No secret leakage.
 - Missing fields listed clearly before finalization.

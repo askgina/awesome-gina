@@ -67,6 +67,22 @@ One-line value proposition.
 1. ...
 2. ...
 
+## Quick Copy Prompt (Ask Gina)
+~~~text
+promptText:
+Create a scheduled recipe:
+- Name: <recipe name>
+- Execute with agent: <gina (spot) | predictions | perps>
+- Schedule: <cron>
+- Timezone: <timezone>
+- Task: <plain-English instruction to run each time>
+- Amount/rules: <size and decision rules>
+
+Then return:
+- Ready-to-run recipe config
+- Quick preflight checklist
+~~~
+
 ## Security and permissions
 - Required permissions: ...
 
@@ -96,6 +112,7 @@ One-line value proposition.
 ## Type-Specific Notes
 
 - `strategy`, `recipe`, `workflow`: full capability contract is required.
+- `recipe`: include a `Quick Copy Prompt (Ask Gina)` section with a `promptText` fenced `text` code block for one-click reuse, including an explicit Execute with agent enum line sourced from lib/ai/agents/index.ts (gina, predictions, perps).
 - `skill`, `filesystem`: concise capability contract is acceptable, but setup and side effects must still be explicit.
 
 ## Skill Content Format (Community Digest)
