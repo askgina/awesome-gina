@@ -2,12 +2,8 @@
 
 Up: [Awesome Gina Index](../../README.md)
 
-## Subcategory A
+## Market Data
 
-- Placeholder entry link
-
-## Subcategory B
-
-- Placeholder entry link
+- [Polymarket Scan And Dedup Workflow](../../skills/workflows/workflow-polymarket-market-scan-dedup.md) - Scan active markets, deduplicate event variants, and flag thin liquidity books.
 
 [Back to Contents](../../README.md)
