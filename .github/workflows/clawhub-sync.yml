@@ -125,7 +125,7 @@ jobs:
               '',
               'See workflow artifacts for `clawhub-dry-run.log`.',
             ];
-            const body = lines.join('\\n');
+            const body = lines.join('\n');
 
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
