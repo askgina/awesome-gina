@@ -1,0 +1,194 @@
+name: ClawHub Sync (awesome-gina official skills)
+
+on:
+  pull_request:
+    paths:
+      - "skills/official/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/official/**"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to ClawHub (false = dry-run only)"
+        required: true
+        default: false
+        type: boolean
+      bump:
+        description: "Version bump type for updates"
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: clawhub-sync-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SKILLS_WORKDIR: skills/official
+  CLAWHUB_CLI_VERSION: "0.7.0"
+  BUMP: ${{ github.event_name == 'workflow_dispatch' && (inputs.bump || 'patch') || 'patch' }}
+
+jobs:
+  dry-run:
+    name: Dry run sync
+    # Fork PRs usually do not have secrets; skip cleanly.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Login to ClawHub
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+        run: |
+          test -n "$CLAWHUB_TOKEN" || { echo "Missing CLAWHUB_TOKEN secret"; exit 1; }
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" login --token "$CLAWHUB_TOKEN"
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" whoami
+
+      - name: Sync (dry run)
+        id: dry_run
+        shell: bash
+        run: |
+          set -o pipefail
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" \
+            --no-input \
+            --workdir "$SKILLS_WORKDIR" \
+            --dir . \
+            sync \
+            --all \
+            --dry-run \
+            --bump "$BUMP" \
+            --tags latest \
+            --concurrency 8 2>&1 | tee clawhub-dry-run.log
+
+          would_upload="$(grep -Eo 'Dry run: would upload [0-9]+ skill\(s\)\.' clawhub-dry-run.log | tail -n1 | grep -Eo '[0-9]+' || true)"
+          if [ -z "$would_upload" ]; then
+            would_upload="unknown"
+          fi
+          echo "would_upload=$would_upload" >> "$GITHUB_OUTPUT"
+
+      - name: Upload dry-run log artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clawhub-dry-run-${{ github.run_id }}-${{ github.run_attempt }}
+          path: clawhub-dry-run.log
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Write dry-run summary
+        if: ${{ always() }}
+        run: |
+          {
+            echo "## ClawHub Dry Run"
+            echo ""
+            echo "- Workdir: \`$SKILLS_WORKDIR\`"
+            echo "- Bump: \`$BUMP\`"
+            echo "- Would upload: \`${{ steps.dry_run.outputs.would_upload }}\`"
+            echo "- CLI: \`clawhub@${CLAWHUB_CLI_VERSION}\`"
+            echo ""
+            echo "Artifact: \`clawhub-dry-run-${{ github.run_id }}-${{ github.run_attempt }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment dry-run result on PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        env:
+          WOULD_UPLOAD: ${{ steps.dry_run.outputs.would_upload }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const marker = '<!-- clawhub-dry-run-comment -->';
+            const lines = [
+              marker,
+              '## ClawHub Dry Run',
+              '- Workdir: `' + process.env.SKILLS_WORKDIR + '`',
+              '- Bump: `' + process.env.BUMP + '`',
+              '- Would upload: `' + (process.env.WOULD_UPLOAD || 'unknown') + '`',
+              '- CLI: `clawhub@' + process.env.CLAWHUB_CLI_VERSION + '`',
+              '',
+              'See workflow artifacts for `clawhub-dry-run.log`.',
+            ];
+            const body = lines.join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const existing = comments.find(
+              (comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+            }
+
+  publish:
+    name: Publish sync
+    needs: dry-run
+    if: >-
+      ${{
+        (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+        (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish)
+      }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Login to ClawHub
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+        run: |
+          test -n "$CLAWHUB_TOKEN" || { echo "Missing CLAWHUB_TOKEN secret"; exit 1; }
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" login --token "$CLAWHUB_TOKEN"
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" whoami
+
+      - name: Sync (publish)
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          bunx "clawhub@${CLAWHUB_CLI_VERSION}" \
+            --no-input \
+            --workdir "$SKILLS_WORKDIR" \
+            --dir . \
+            sync \
+            --all \
+            --bump "$BUMP" \
+            --changelog "CI sync from ${GITHUB_REPOSITORY}@${SHORT_SHA}" \
+            --tags latest \
+            --concurrency 8

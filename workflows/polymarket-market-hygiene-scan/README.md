@@ -83,8 +83,8 @@ Workflow submission with a concrete artifact at workflows/polymarket-market-hygi
 - evidence.setup: workflows/polymarket-market-hygiene-scan/README.md#setup
 - evidence.example: missing (add a committed run artifact path or URL before claiming PR-ready verification)
 - Workflow artifact: workflows/polymarket-market-hygiene-scan/references/polymarket-market-hygiene-scan@latest.ts
-- Setup guide reference: skills/workflows/SKILL.md
-- Implementation details: skills/workflows/references/polymarket-patterns.md
+- Setup guide reference: skills/official/workflows/SKILL.md
+- Implementation details: skills/official/workflows/references/polymarket-patterns.md
 
 ## Backlinks
 

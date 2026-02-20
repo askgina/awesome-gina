@@ -22,8 +22,14 @@ awesome-gina/
       skills.md
       filesystem.md
   skills/
-    <category>/
-      <entry-slug>.md
+    official/
+      <category>/
+        <entry-slug>.md
+    community/
+      <category>/
+        <entry-slug>.md
+    <local-or-internal>/
+      ...
   data/
     skills.json
     schema.json
@@ -37,6 +43,10 @@ awesome-gina/
       validate-metadata.yml
       stale-sweep.yml
 ```
+
+- `skills/official/*` is the synced/exported namespace for ClawHub flows.
+- `skills/community/*` is a valid non-synced community namespace.
+- Other namespaces under `skills/*` are allowed for local/internal use.
 
 ## TOC Standard
 
@@ -82,10 +92,10 @@ Each entry page:
 Up: [Awesome Gina Index](../../README.md)
 
 ## Subcategory A
-- [Entry Alpha](../../skills/subcategory-a/entry-alpha.md) - one line
+- [Entry Alpha](../../skills/official/subcategory-a/entry-alpha.md) - one line
 
 ## Subcategory B
-- [Entry Beta](../../skills/subcategory-b/entry-beta.md) - one line
+- [Entry Beta](../../skills/official/subcategory-b/entry-beta.md) - one line
 
 [Back to Contents](../../README.md)
 ```

@@ -6,6 +6,9 @@ This schema is intentionally small and matches what is actually shippable now.
 
 - Community entries are submitted through manual PR flow in `this repository`.
 - Manual PR submission is the default path; API-based publishing is optional.
+- Submission lanes:
+  - `skills/community/*` is valid for non-synced community submissions.
+  - `skills/official/*` is for synced/exported entries (ClawHub).
 - This schema is for docs quality and moderation consistency, not runtime storage yet.
 
 ## Supported v0 Submission Types (Shareable Now)
@@ -90,12 +93,15 @@ Other docs should reference this section instead of redefining type semantics.
 
 ## Source Layout Guidance
 
+- Entry markdown files should live in one of these lanes:
+  - `skills/community/<category>/<entry-slug>.md` (valid, non-synced community lane)
+  - `skills/official/<category>/<entry-slug>.md` (synced/exported lane)
 - `workflow` submissions should keep docs and runnable artifacts colocated:
   - `workflows/<workflow-folder>/README.md`
   - `workflows/<workflow-folder>/references/<artifact>@latest.ts`
   - optional additional docs under `workflows/<workflow-folder>/references/` for deep implementation notes
 - Workflow artifact filenames must not start with `workflow-`.
-- For optional directory conventions, align with the workflow skill guidance in `skills/workflows/SKILL.md`.
+- For optional directory conventions, align with the workflow skill guidance in `skills/official/workflows/SKILL.md`.
 
 ### Skill Content Addendum (for `type: skill`)
 
@@ -134,6 +140,7 @@ Manual review policy checks in v0 (not fully automated yet):
 - `tags` should have a max count of 12.
 - `security.permissions` should be explicit; no wildcard strings.
 - `workflow` submissions should follow the source layout guidance above and keep path references valid.
+- Entry file lane should match sync intent (`skills/community/*` for non-synced, `skills/official/*` for synced/exported).
 
 ## Why This Is Small
 
