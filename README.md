@@ -16,7 +16,7 @@ Community-curated strategies, recipes, workflows, skills, and filesystem pattern
 
 1. Read CONTRIBUTING.md.
 2. Pick a submission type using docs/specs/capability-schema.md.
-3. Author your entry under skills|filesystem|workflow|recipe|strategy/<category?>/<entry-slug>.md.
+3. Author your entry under skills/<type>/<entry-slug>.md where <type> is strategy|recipe|workflow|skill|filesystem.
 4. Open a PR using the repository PR template.
 
 ## Source Of Truth
