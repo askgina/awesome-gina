@@ -1,6 +1,6 @@
 # Community Entry Template (v0)
 
-Use this for every community entry page under `skills/<category>/<entry-slug>.md`.
+Use this for every community entry page under `skills/<lane>/<category>/<entry-slug>.md` where `<lane>` is `community` (default) or `official` (synced/exported).
 
 This template is an authoring projection of the canonical schema in
 `capability-schema.md`. Field names and enums should stay aligned.
@@ -13,7 +13,7 @@ Worked examples:
 
 ## Naming Convention
 
-- Folder: `skills/<category>/`
+- Folder: `skills/<lane>/<category>/`
 - File: `<entry-slug>.md`
 - Slug style: lowercase, hyphenated, stable identifier.
 
@@ -130,7 +130,7 @@ This spec uses a simplified community projection of that format.
 - Skill description: Detects PnL anomalies and explains when to act.
 - Compatibility: Requires network access and predictions MCP connection.
 - Allowed tools: predictions-mcp filesystem
-- SKILL.md path in source repo: skills/pnl-alerts/SKILL.md
+- SKILL.md path in source repo: skills/<lane>/pnl-alerts/SKILL.md
 - Optional directories used: scripts/, references/, assets/
 ```
 

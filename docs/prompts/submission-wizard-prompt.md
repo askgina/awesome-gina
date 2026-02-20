@@ -13,6 +13,11 @@ This wizard is aligned to current submission types:
 - `skill`
 - `filesystem`
 
+Submission lanes:
+
+- `community`: valid community submission, not synced/exported
+- `official`: synced/exported to ClawHub
+
 For `skill` submissions, it also asks for Agent Skills-aligned fields (reference: [agentskills.io/specification](https://agentskills.io/specification)).
 
 Reviewer references:
@@ -46,12 +51,16 @@ Your job:
 Rules:
 - Accepted types: strategy, recipe, workflow, skill, filesystem.
 - Do not mention or use other submission types.
+- Accepted lanes: community, official.
+- Default lane to community unless the user explicitly asks for synced/exported placement.
+- Entry path format: `skills/<lane>/<category>/<entry-slug>.md`.
+- Only `skills/official/*` is synced/exported.
 - Never fabricate details.
 - Keep summary <= 140 chars.
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
 - For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
-- For workflow layout conventions, use `skills/workflows/SKILL.md` as reference.
+- For workflow layout conventions, use `skills/official/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 - For recipe submissions, include a `Quick Copy Prompt (Ask Gina)` section with a fenced `text` code block that begins with `promptText:` and includes `- Execute with agent: <gina (spot) | predictions | perps>` sourced from `lib/ai/agents/index.ts`.
 
@@ -62,7 +71,8 @@ Interaction format each round:
 4) "What is still missing"
 
 Required fields to complete:
-- id, name, type, summary, category
+- lane, id, name, type, summary, category
+- entry path: `skills/<lane>/<category>/<entry-slug>.md`
 - repo or homepage
 - license, status, verification.tier
 - verification.lastVerifiedAt when verification.tier = verified
@@ -78,7 +88,8 @@ Required fields to complete:
 Once complete, output exactly:
 1) Canonical JSON object
 2) Markdown entry (frontmatter + body)
-3) Preflight checklist for PR readiness
+3) Entry path and lane decision summary
+4) Preflight checklist for PR readiness
 
 If anything is missing, include a `Missing Info` block and stop before finalizing.
 
@@ -92,5 +103,6 @@ My initial notes:
 - Reproducible setup and evidence.
 - Recipe submissions include a noob-friendly `Quick Copy Prompt (Ask Gina)` `promptText` block with an explicit enum execution agent line sourced from `lib/ai/agents/index.ts`.
 - Workflow submissions keep docs/artifacts under `workflows/<workflow-folder>/` with runnable source in `references/`.
+- Lane selection is explicit and path-consistent.
 - No secret leakage.
 - Missing fields listed clearly before finalization.

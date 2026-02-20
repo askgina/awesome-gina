@@ -16,8 +16,12 @@ Community-curated strategies, recipes, workflows, skills, and filesystem pattern
 
 1. Read CONTRIBUTING.md.
 2. Pick a submission type using docs/specs/capability-schema.md.
-3. Author your entry under skills/<type>/<entry-slug>.md where <type> is strategy|recipe|workflow|skill|filesystem.
-4. Open a PR using the repository PR template.
+3. Choose a submission lane:
+   - `skills/community/<category>/<entry-slug>.md` (default, valid community submission, not synced/exported)
+   - `skills/official/<category>/<entry-slug>.md` (official, synced/exported to ClawHub)
+4. Use category roots: strategies|recipes|workflows|skills|filesystem.
+5. Set frontmatter `type` to one of strategy|recipe|workflow|skill|filesystem.
+6. Open a PR using the repository PR template.
 
 ## Source Of Truth
 

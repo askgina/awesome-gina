@@ -16,9 +16,24 @@ Canonical definitions: docs/specs/capability-schema.md.
 
 ## 2) Author Your Entry
 
-Create a file at:
+Create a file at one of:
 
-- skills/<category>/<entry-slug>.md
+- skills/community/<category>/<entry-slug>.md
+- skills/official/<category>/<entry-slug>.md
+
+Category roots:
+
+- strategy -> strategies
+- recipe -> recipes
+- workflow -> workflows
+- skill -> skills
+- filesystem -> filesystem
+
+Lane rules:
+
+- `skills/community/*` is for valid community submissions that are not synced/exported.
+- `skills/official/*` is the synced source for ClawHub ingestion.
+- Maintainers can promote entries from `skills/community/*` to `skills/official/*` when ready.
 
 Use:
 
