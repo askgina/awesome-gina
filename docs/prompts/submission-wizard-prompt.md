@@ -60,7 +60,7 @@ Rules:
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
 - For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
-- For workflow layout conventions, use `skills/official/workflows/SKILL.md` as reference.
+- For workflow layout conventions, use `skills/official/sandbox/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 - For recipe submissions, include a `Quick Copy Prompt (Ask Gina)` section with a fenced `text` code block that begins with `promptText:` and includes `- Execute with agent: <gina (spot) | predictions | perps>` sourced from `lib/ai/agents/index.ts`.
 

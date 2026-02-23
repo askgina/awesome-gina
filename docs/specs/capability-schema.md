@@ -101,7 +101,7 @@ Other docs should reference this section instead of redefining type semantics.
   - `workflows/<workflow-folder>/references/<artifact>@latest.ts`
   - optional additional docs under `workflows/<workflow-folder>/references/` for deep implementation notes
 - Workflow artifact filenames must not start with `workflow-`.
-- For optional directory conventions, align with the workflow skill guidance in `skills/official/workflows/SKILL.md`.
+- For optional directory conventions, align with the workflow skill guidance in `skills/official/sandbox/workflows/SKILL.md`.
 
 ### Skill Content Addendum (for `type: skill`)
 

@@ -4,7 +4,8 @@ This guide documents the intended behavior of `.github/workflows/clawhub-sync.ym
 
 ## Scope
 
-- Sync source: `skills/official/**`
+- Trigger path: `skills/official/**`
+- Sync workdir: `skills/official/sandbox`
 - Non-synced lane: `skills/community/**` is intentionally excluded from this workflow.
 
 ## Trigger Matrix
@@ -22,7 +23,7 @@ This guide documents the intended behavior of `.github/workflows/clawhub-sync.ym
    - checkout repo
    - install Bun
    - login with `CLAWHUB_TOKEN`
-   - run `clawhub sync --dry-run` against `skills/official`
+   - run `clawhub sync --dry-run` against `skills/official/sandbox`
 
 2. `publish` (gated):
    - requires `dry-run`
@@ -67,7 +68,7 @@ Commands validated against `clawhub` CLI v0.7.0 help output.
 | `clawhub sync --changelog <text>` | Yes | Used for update publish metadata |
 | `clawhub sync --tags <csv>` | Yes | Comma-separated tags (e.g. `latest`) |
 | `clawhub sync --concurrency <n>` | Yes | Registry check fanout (configured to 1 to reduce rate-limit failures) |
-| global `--workdir <dir>` | Yes | Used as `skills/official` |
+| global `--workdir <dir>` | Yes | Used as `skills/official/sandbox` |
 | global `--dir .` | Yes | Scan root inside workdir |
 
 ## Mermaid (pairing diagram)

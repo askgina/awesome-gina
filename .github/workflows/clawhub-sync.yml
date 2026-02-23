@@ -35,7 +35,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SKILLS_WORKDIR: skills/official
+  SKILLS_WORKDIR: skills/official/sandbox
   CLAWHUB_CLI_VERSION: "0.7.0"
   BUMP: ${{ github.event_name == 'workflow_dispatch' && (inputs.bump || 'patch') || 'patch' }}
 

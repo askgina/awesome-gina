@@ -47,7 +47,7 @@ For `workflow` submissions, also collect source layout details:
 - colocated `README.md`
 - `references/<artifact>@latest.ts` (artifact filename must not start with `workflow-`)
 - optional additional docs under `references/` for deeper implementation details
-- optional layout conventions should follow `skills/official/workflows/SKILL.md`
+- optional layout conventions should follow `skills/official/sandbox/workflows/SKILL.md`
 
 For `strategy`, `recipe`, and `workflow`, require:
 
@@ -179,7 +179,7 @@ Rules:
 - Never output secret values, only secret names.
 - Default verification tier to unverified.
 - For workflow submissions, use `workflows/<workflow-folder>/` with `README.md` plus `references/<artifact>@latest.ts`; the artifact filename must not start with `workflow-`.
-- For workflow layout conventions, use `skills/official/workflows/SKILL.md` as reference.
+- For workflow layout conventions, use `skills/official/sandbox/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 
 Interaction format each round:
