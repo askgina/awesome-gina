@@ -1,14 +1,14 @@
 ---
 id: workflows
 name: "Workflows via Ask Gina"
-description: "Playbook for authoring, running, evaluating, and improving Gina hub workflows with safe defaults and repeatable operations."
+description: "Playbook for authoring, running, evaluating, and improving Gina sandbox workflows with safe defaults and repeatable operations."
 ---
 
 # Workflows via Ask Gina Skill
 
 ## What It Does
 
-Provides a practical workflow-authoring and operations standard for Gina hub automation.
+Provides a practical workflow-authoring and operations standard for Gina sandbox automation.
 
 - Creates and validates workflow definitions.
 - Runs workflows and inspects artifacts/logs.
