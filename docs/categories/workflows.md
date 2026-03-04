@@ -10,5 +10,7 @@ Up: [Awesome Gina Index](../../README.md)
 ## Trading
 
 - [Signal Prediction Stop-Loss v2 Workflow](../../workflows/signal-prediction-stoploss-v2/README.md) - Attempt 15m BTC signal trades and monitor filled positions with stop-loss logic.
+- [BTC Hourly Stop-Loss Workflow](../../workflows/btc-hourly-sl/README.md) - Run BTC hourly entry/stop-loss logic from :45 through :58 each hour (UTC).
+- [BTC Hourly Force Sell Workflow](../../workflows/btc-hourly-sell/README.md) - Force-close BTC hourly position at :59 each hour and clear state on confirmed exit.
 
 [Back to Contents](../../README.md)

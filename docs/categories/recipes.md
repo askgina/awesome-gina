@@ -23,5 +23,7 @@ Up: [Awesome Gina Index](../../README.md)
 - [Hourly Sell All Positions](../../recipes/hourly-ops/recipe-hourly-sell-all-positions.md) - Aggressively sell all positions and redeem expired at :58 hourly.
 - [Hourly Redeem and Close Orders](../../recipes/hourly-ops/recipe-hourly-redeem-close-orders.md) - Redeem, close leftovers, and cancel open limits at :30 hourly.
 - [Hourly Hey Heartbeat](../../recipes/hourly-ops/recipe-hourly-hey-heartbeat.md) - Send a heartbeat hey message at :52 hourly (Europe/London).
+- [BTC Hourly SL](../../recipes/hourly-ops/recipe-btc-hourly-sl.md) - Run BTC hourly entry/SL checks from :45 through :58 each hour (UTC).
+- [BTC Hourly Force Sell](../../recipes/hourly-ops/recipe-btc-hourly-force-sell.md) - Force-sell residual BTC hourly position at :59 each hour (UTC).
 
 [Back to Contents](../../README.md)
