@@ -4,7 +4,7 @@ slug: recipe-hourly-sell-all-positions
 name: Hourly Sell All Positions
 type: recipe
 summary: Aggressively sell all open positions and redeem expired positions at minute 58 each hour.
-category: recipes/hourly-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -22,8 +22,8 @@ security:
     - redeem-position
     - write-run-artifacts
 evidence:
-  setup: recipes/hourly-ops/recipe-hourly-sell-all-positions.md#setup
-  example: recipes/hourly-ops/recipe-hourly-sell-all-positions.md#evidence
+  setup: recipes/predictions/recipe-hourly-sell-all-positions.md#setup
+  example: recipes/predictions/recipe-hourly-sell-all-positions.md#evidence
 tags: [hourly, exit, sell-all, redeem, operations]
 relationships:
   strategyIds:
