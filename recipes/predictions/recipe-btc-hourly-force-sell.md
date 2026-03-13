@@ -4,7 +4,7 @@ slug: recipe-btc-hourly-force-sell
 name: BTC Hourly Force Sell
 type: recipe
 summary: Force-sell BTC hourly position at minute 59 and clear state after confirmed terminal action.
-category: recipes/hourly-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -23,8 +23,8 @@ security:
     - write-run-artifacts
     - write-local-state-file
 evidence:
-  setup: recipes/hourly-ops/recipe-btc-hourly-force-sell.md#setup
-  example: recipes/hourly-ops/recipe-btc-hourly-force-sell.md#evidence
+  setup: recipes/predictions/recipe-btc-hourly-force-sell.md#setup
+  example: recipes/predictions/recipe-btc-hourly-force-sell.md#evidence
 tags: [btc, hourly, sell, recipe, predictions]
 ---
 
@@ -92,7 +92,7 @@ Then return:
 
 - Workflow artifact: `workflows/btc-hourly-sell/references/btc-hourly-sell@latest.ts`
 - Trigger time: `59 * * * *` UTC
-- Companion workflow recipe: `recipes/hourly-ops/recipe-btc-hourly-sl.md`
+- Companion workflow recipe: `recipes/predictions/recipe-btc-hourly-sl.md`
 
 ## Backlinks
 

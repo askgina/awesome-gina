@@ -1,10 +1,10 @@
 ---
-id: recipe-btc-hourly-buy-75-95
-slug: recipe-btc-hourly-buy-75-95
-name: BTC Hourly Buy (75-95 Odds)
+id: recipe-sol-hourly-buy-75-95
+slug: recipe-sol-hourly-buy-75-95
+name: SOL Hourly Buy (75-95 Odds)
 type: recipe
-summary: Buy BTC hourly Up/Down winner at 75-95% odds and hand off to hourly exit automations.
-category: recipes/hourly-momentum
+summary: Buy SOL hourly Up/Down winner at 75-95% odds and hand off to hourly exit automations.
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -22,31 +22,31 @@ security:
     - read-position
     - write-run-artifacts
 evidence:
-  setup: recipes/hourly-momentum/recipe-btc-hourly-buy-75-95.md#setup
-  example: recipes/hourly-momentum/recipe-btc-hourly-buy-75-95.md#evidence
-tags: [btc, hourly, momentum, buy, odds-band]
+  setup: recipes/predictions/recipe-sol-hourly-buy-75-95.md#setup
+  example: recipes/predictions/recipe-sol-hourly-buy-75-95.md#evidence
+tags: [sol, hourly, momentum, buy, odds-band]
 relationships:
   strategyIds:
     - strategy-hourly-crypto-markets
 ---
 
-# BTC Hourly Buy (75-95 Odds)
+# SOL Hourly Buy (75-95 Odds)
 
-Buys the high-probability BTC side twice per hour using aggressive fills.
+Buys the high-probability SOL side twice per hour using aggressive fills.
 
 ## What it does
 
-- Evaluates BTC Up/Down market odds at minute 45 and minute 52 each hour.
-- Buys the side in the 75-95% band with a fixed 150 USD notional.
-- Skips execution when neither side qualifies.
+- Evaluates SOL Up/Down market odds at minute 45 and minute 49 each hour.
+- Buys the side in the 75-95% band with a fixed 70 USD notional.
+- Uses series 10122 context from source notes.
 
 ## Capability contract
 
-- Trigger: cron 45,52 * * * *.
+- Trigger: cron 45,49 * * * *.
 - Inputs:
-  - market: BTC hourly Up/Down market
+  - market: SOL hourly Up/Down market (series 10122)
   - targetOddsBand: 75-95%
-  - betSizeUsd: 150
+  - betSizeUsd: 70
   - fillMode: aggressive
 - Outputs:
   - placed order receipt when a qualifying side exists
@@ -67,9 +67,9 @@ Buys the high-probability BTC side twice per hour using aggressive fills.
 
 ## Setup
 
-1. Configure the recipe scheduler for minute 45 and minute 52 each hour.
-2. Bind the BTC hourly Up/Down market source used by your Gina environment.
-3. Set target odds band to 75-95 and bet size to 150 USD.
+1. Configure the recipe scheduler for minute 45 and minute 49 each hour.
+2. Bind the SOL hourly Up/Down market source (series 10122 where applicable).
+3. Set target odds band to 75-95 and bet size to 70 USD.
 4. Ensure hourly exit recipes are enabled if you expect short holds.
 
 ## Quick Copy Prompt (Ask Gina)
@@ -77,12 +77,12 @@ Buys the high-probability BTC side twice per hour using aggressive fills.
 ~~~text
 promptText:
 Create a scheduled recipe:
-- Name: BTC Hourly Buy (75-95 Odds)
+- Name: SOL Hourly Buy (75-95 Odds)
 - Execute with agent: predictions
-- Schedule: 45,52 * * * *
+- Schedule: 45,49 * * * *
 - Timezone: UTC (or my scheduler default)
-- Task: Buy the BTC hourly Up/Down side in the 75-95% odds band.
-- Amount/rules: Bet size 150 USD; skip and log when neither side qualifies.
+- Task: Buy the SOL hourly Up/Down side in the 75-95% odds band.
+- Amount/rules: Bet size 70 USD; series context 10122; skip and log when no side qualifies.
 
 Then return:
 - Ready-to-run recipe config
@@ -96,8 +96,8 @@ Then return:
 ## Evidence
 
 - Source notes: gina-recipes.md (user-provided notes).
-- Run count observed in notes: 1018.
-- Created date from notes: January 20, 2026.
+- Run count observed in notes: 394.
+- Created date from notes: February 10, 2026.
 
 ## Backlinks
 

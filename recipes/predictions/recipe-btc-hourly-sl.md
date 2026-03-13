@@ -4,7 +4,7 @@ slug: recipe-btc-hourly-sl
 name: BTC Hourly SL
 type: recipe
 summary: Run BTC hourly entry and stop-loss checks from minutes 45 through 58 each hour.
-category: recipes/hourly-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -24,8 +24,8 @@ security:
     - write-run-artifacts
     - write-local-state-file
 evidence:
-  setup: recipes/hourly-ops/recipe-btc-hourly-sl.md#setup
-  example: recipes/hourly-ops/recipe-btc-hourly-sl.md#evidence
+  setup: recipes/predictions/recipe-btc-hourly-sl.md#setup
+  example: recipes/predictions/recipe-btc-hourly-sl.md#evidence
 tags: [btc, hourly, stop-loss, recipe, predictions]
 ---
 
@@ -98,7 +98,7 @@ Then return:
 
 - Workflow artifact: `workflows/btc-hourly-sl/references/btc-hourly-sl@latest.ts`
 - Trigger window: `45-58 * * * *` UTC
-- Companion workflow recipe: `recipes/hourly-ops/recipe-btc-hourly-force-sell.md`
+- Companion workflow recipe: `recipes/predictions/recipe-btc-hourly-force-sell.md`
 
 ## Backlinks
 

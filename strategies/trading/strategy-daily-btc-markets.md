@@ -39,9 +39,9 @@ Daily strategy bundle for BTC entry, risk control, and terminal daily cleanup.
 
 ## Bundle map
 
-- `recipe-btc-daily-buy-75-95` ([file](../../recipes/daily-momentum/recipe-btc-daily-buy-75-95.md))
-- `recipe-daily-btc-stop-loss` ([file](../../recipes/daily-ops/recipe-daily-btc-stop-loss.md))
-- `recipe-daily-crypto-predictions-sell-all` ([file](../../recipes/daily-ops/recipe-daily-crypto-predictions-sell-all.md))
+- `recipe-btc-daily-buy-75-95` ([file](../../recipes/predictions/recipe-btc-daily-buy-75-95.md))
+- `recipe-daily-btc-stop-loss` ([file](../../recipes/predictions/recipe-daily-btc-stop-loss.md))
+- `recipe-daily-crypto-predictions-sell-all` ([file](../../recipes/predictions/recipe-daily-crypto-predictions-sell-all.md))
 
 ## Capability contract
 
@@ -76,9 +76,9 @@ Daily strategy bundle for BTC entry, risk control, and terminal daily cleanup.
 ## Setup
 
 1. Enable bundled recipes:
-   - `recipes/daily-momentum/recipe-btc-daily-buy-75-95.md`
-   - `recipes/daily-ops/recipe-daily-btc-stop-loss.md`
-   - `recipes/daily-ops/recipe-daily-crypto-predictions-sell-all.md`
+   - `recipes/predictions/recipe-btc-daily-buy-75-95.md`
+   - `recipes/predictions/recipe-daily-btc-stop-loss.md`
+   - `recipes/predictions/recipe-daily-crypto-predictions-sell-all.md`
 2. Keep timezone handling consistent across the bundle (`UTC` and `Europe/London` schedule boundaries must be intentional).
 3. Wire strategy route in app CMS:
    - set `publicUrl` to the shared page URL when published (typically `https://askgina.ai/recipe/<uuid>`)
@@ -90,9 +90,9 @@ Daily strategy bundle for BTC entry, risk control, and terminal daily cleanup.
 
 ## Evidence
 
-- `recipes/daily-momentum/recipe-btc-daily-buy-75-95.md`
-- `recipes/daily-ops/recipe-daily-btc-stop-loss.md`
-- `recipes/daily-ops/recipe-daily-crypto-predictions-sell-all.md`
+- `recipes/predictions/recipe-btc-daily-buy-75-95.md`
+- `recipes/predictions/recipe-daily-btc-stop-loss.md`
+- `recipes/predictions/recipe-daily-crypto-predictions-sell-all.md`
 
 ## Backlinks
 

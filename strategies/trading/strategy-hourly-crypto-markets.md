@@ -43,12 +43,12 @@ Hourly multi-asset strategy bundle combining momentum entries with recurrent cle
 
 ## Bundle map
 
-- `recipe-btc-hourly-buy-75-95` ([file](../../recipes/hourly-momentum/recipe-btc-hourly-buy-75-95.md))
-- `recipe-eth-hourly-buy-75-95` ([file](../../recipes/hourly-momentum/recipe-eth-hourly-buy-75-95.md))
-- `recipe-sol-hourly-buy-75-95` ([file](../../recipes/hourly-momentum/recipe-sol-hourly-buy-75-95.md))
-- `recipe-xrp-hourly-buy-75-95` ([file](../../recipes/hourly-momentum/recipe-xrp-hourly-buy-75-95.md))
-- `recipe-hourly-sell-all-positions` ([file](../../recipes/hourly-ops/recipe-hourly-sell-all-positions.md))
-- `recipe-hourly-redeem-close-orders` ([file](../../recipes/hourly-ops/recipe-hourly-redeem-close-orders.md))
+- `recipe-btc-hourly-buy-75-95` ([file](../../recipes/predictions/recipe-btc-hourly-buy-75-95.md))
+- `recipe-eth-hourly-buy-75-95` ([file](../../recipes/predictions/recipe-eth-hourly-buy-75-95.md))
+- `recipe-sol-hourly-buy-75-95` ([file](../../recipes/predictions/recipe-sol-hourly-buy-75-95.md))
+- `recipe-xrp-hourly-buy-75-95` ([file](../../recipes/predictions/recipe-xrp-hourly-buy-75-95.md))
+- `recipe-hourly-sell-all-positions` ([file](../../recipes/predictions/recipe-hourly-sell-all-positions.md))
+- `recipe-hourly-redeem-close-orders` ([file](../../recipes/predictions/recipe-hourly-redeem-close-orders.md))
 
 ## Capability contract
 
@@ -82,12 +82,12 @@ Hourly multi-asset strategy bundle combining momentum entries with recurrent cle
 ## Setup
 
 1. Enable bundled recipes:
-   - `recipes/hourly-momentum/recipe-btc-hourly-buy-75-95.md`
-   - `recipes/hourly-momentum/recipe-eth-hourly-buy-75-95.md`
-   - `recipes/hourly-momentum/recipe-sol-hourly-buy-75-95.md`
-   - `recipes/hourly-momentum/recipe-xrp-hourly-buy-75-95.md`
-   - `recipes/hourly-ops/recipe-hourly-sell-all-positions.md`
-   - `recipes/hourly-ops/recipe-hourly-redeem-close-orders.md`
+   - `recipes/predictions/recipe-btc-hourly-buy-75-95.md`
+   - `recipes/predictions/recipe-eth-hourly-buy-75-95.md`
+   - `recipes/predictions/recipe-sol-hourly-buy-75-95.md`
+   - `recipes/predictions/recipe-xrp-hourly-buy-75-95.md`
+   - `recipes/predictions/recipe-hourly-sell-all-positions.md`
+   - `recipes/predictions/recipe-hourly-redeem-close-orders.md`
 2. Keep scheduler timezone consistent across all six recipes.
 3. Wire strategy route in app CMS:
    - set `publicUrl` to the shared page URL when published (typically `https://askgina.ai/recipe/<uuid>`)
@@ -99,12 +99,12 @@ Hourly multi-asset strategy bundle combining momentum entries with recurrent cle
 
 ## Evidence
 
-- `recipes/hourly-momentum/recipe-btc-hourly-buy-75-95.md`
-- `recipes/hourly-momentum/recipe-eth-hourly-buy-75-95.md`
-- `recipes/hourly-momentum/recipe-sol-hourly-buy-75-95.md`
-- `recipes/hourly-momentum/recipe-xrp-hourly-buy-75-95.md`
-- `recipes/hourly-ops/recipe-hourly-sell-all-positions.md`
-- `recipes/hourly-ops/recipe-hourly-redeem-close-orders.md`
+- `recipes/predictions/recipe-btc-hourly-buy-75-95.md`
+- `recipes/predictions/recipe-eth-hourly-buy-75-95.md`
+- `recipes/predictions/recipe-sol-hourly-buy-75-95.md`
+- `recipes/predictions/recipe-xrp-hourly-buy-75-95.md`
+- `recipes/predictions/recipe-hourly-sell-all-positions.md`
+- `recipes/predictions/recipe-hourly-redeem-close-orders.md`
 
 ## Backlinks
 

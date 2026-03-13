@@ -4,7 +4,7 @@ slug: recipe-daily-btc-stop-loss
 name: Daily BTC Stop Loss
 type: recipe
 summary: Stop-loss sell for BTC Daily market positions valued at $70 or below, checked hourly between 2-5 PM Europe/London.
-category: recipes/daily-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -22,8 +22,8 @@ security:
     - read-market-data
     - write-run-artifacts
 evidence:
-  setup: recipes/daily-ops/recipe-daily-btc-stop-loss.md#setup
-  example: recipes/daily-ops/recipe-daily-btc-stop-loss.md#evidence
+  setup: recipes/predictions/recipe-daily-btc-stop-loss.md#setup
+  example: recipes/predictions/recipe-daily-btc-stop-loss.md#evidence
 tags: [btc, daily, stop-loss, sell, operations]
 relationships:
   strategyIds:

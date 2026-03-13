@@ -4,7 +4,7 @@ slug: recipe-xrp-hourly-buy-75-95
 name: XRP Hourly Buy (75-95 Odds)
 type: recipe
 summary: Buy XRP hourly Up/Down winner at 75-95% odds and hand off to hourly exit automations.
-category: recipes/hourly-momentum
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -22,8 +22,8 @@ security:
     - read-position
     - write-run-artifacts
 evidence:
-  setup: recipes/hourly-momentum/recipe-xrp-hourly-buy-75-95.md#setup
-  example: recipes/hourly-momentum/recipe-xrp-hourly-buy-75-95.md#evidence
+  setup: recipes/predictions/recipe-xrp-hourly-buy-75-95.md#setup
+  example: recipes/predictions/recipe-xrp-hourly-buy-75-95.md#evidence
 tags: [xrp, hourly, momentum, buy, odds-band]
 relationships:
   strategyIds:

@@ -4,7 +4,7 @@ slug: recipe-daily-crypto-predictions-sell-all
 name: Daily Crypto Predictions Sell All
 type: recipe
 summary: Aggressively sell all prediction positions and redeem expired positions daily at 4:58 PM UTC.
-category: recipes/daily-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -22,8 +22,8 @@ security:
     - redeem-position
     - write-run-artifacts
 evidence:
-  setup: recipes/daily-ops/recipe-daily-crypto-predictions-sell-all.md#setup
-  example: recipes/daily-ops/recipe-daily-crypto-predictions-sell-all.md#evidence
+  setup: recipes/predictions/recipe-daily-crypto-predictions-sell-all.md#setup
+  example: recipes/predictions/recipe-daily-crypto-predictions-sell-all.md#evidence
 tags: [crypto, daily, sell-all, redeem, operations]
 relationships:
   strategyIds:

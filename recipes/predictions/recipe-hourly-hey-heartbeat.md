@@ -4,7 +4,7 @@ slug: recipe-hourly-hey-heartbeat
 name: Hourly Hey Heartbeat
 type: recipe
 summary: Send a simple hey heartbeat at minute 52 each hour in Europe/London timezone.
-category: recipes/hourly-ops
+category: recipes/predictions
 status: active
 owner: askgina
 repo: https://github.com/askgina/awesome-gina
@@ -20,8 +20,8 @@ security:
     - send-message
     - write-run-artifacts
 evidence:
-  setup: recipes/hourly-ops/recipe-hourly-hey-heartbeat.md#setup
-  example: recipes/hourly-ops/recipe-hourly-hey-heartbeat.md#evidence
+  setup: recipes/predictions/recipe-hourly-hey-heartbeat.md#setup
+  example: recipes/predictions/recipe-hourly-hey-heartbeat.md#evidence
 tags: [hourly, heartbeat, messaging, test, london-timezone]
 ---
 
