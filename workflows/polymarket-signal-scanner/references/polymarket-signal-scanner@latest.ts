@@ -1,4 +1,4 @@
-import defineWorkflow from "/workspace/tools/workflow/defineWorkflow"
+import defineWorkflow from "/runtime/tools/workflow/defineWorkflow"
 
 export default defineWorkflow({
   version: 1,
@@ -28,9 +28,9 @@ export default defineWorkflow({
         'const raw = await callTool("fetchPolymarketData", { limit })',
         "const rows = Array.isArray(raw) ? raw : []",
         "",
-        'await fs.promises.writeFile("/workspace/outputs/polymarket_signal_scanner_raw.json", JSON.stringify(rows, null, 2))',
+        'await fs.promises.writeFile("/workspace/scratch/polymarket_signal_scanner_raw.json", JSON.stringify(rows, null, 2))',
         'await exec("sql query \'DROP TABLE IF EXISTS polymarket_signal_scan_raw\'")',
-        'await exec("sql register polymarket_signal_scan_raw /workspace/outputs/polymarket_signal_scanner_raw.json --replace")',
+        'await exec("sql register polymarket_signal_scan_raw /workspace/scratch/polymarket_signal_scanner_raw.json --replace")',
         "",
         'export default { fetched: rows.length, table: "polymarket_signal_scan_raw" }',
       ].join("\n"),
@@ -123,7 +123,7 @@ export default defineWorkflow({
         "  snapshotKey: runKey,",
         "  snapshotPrefix,",
         "}",
-        'await fs.promises.writeFile("/workspace/outputs/polymarket_signal_scanner_result.json", JSON.stringify(result, null, 2))',
+        'await fs.promises.writeFile("/workspace/scratch/polymarket_signal_scanner_result.json", JSON.stringify(result, null, 2))',
         "export default result",
       ].join("\n"),
     },
@@ -134,7 +134,7 @@ export default defineWorkflow({
       depends_on: ["rank_candidates"],
       timeout: 20000,
       code: [
-        'const raw = await fs.promises.readFile("/workspace/outputs/polymarket_signal_scanner_result.json", "utf8").catch(() => null)',
+        'const raw = await fs.promises.readFile("/workspace/scratch/polymarket_signal_scanner_result.json", "utf8").catch(() => null)',
         "let result = null",
         "if (raw) {",
         "  try {",
@@ -169,7 +169,7 @@ export default defineWorkflow({
         "  ],",
         "  sideEffects: [",
         '    "reads market data via fetchPolymarketData",',
-        '    "writes /workspace/outputs/polymarket_signal_scanner_*.json artifacts",',
+        '    "writes /workspace/scratch/polymarket_signal_scanner_*.json artifacts",',
         '    "persists shortlist snapshots under KV prefix",',
         "  ],",
         "  failureModes: [",
@@ -179,11 +179,11 @@ export default defineWorkflow({
         "  ],",
         "  evidence: {",
         '    setup: "workflow validate polymarket-signal-scanner && workflow run polymarket-signal-scanner",',
-        '    example: "/workspace/outputs/polymarket_signal_scanner_result.json",',
+        '    example: "/workspace/scratch/polymarket_signal_scanner_result.json",',
         "  },",
         "}",
         "",
-        'await fs.promises.writeFile("/workspace/outputs/polymarket_signal_scanner_submission.json", JSON.stringify(submission, null, 2))',
+        'await fs.promises.writeFile("/workspace/scratch/polymarket_signal_scanner_submission.json", JSON.stringify(submission, null, 2))',
         "",
         "const top = Array.isArray(result.shortlist) ? result.shortlist.slice(0, 10) : []",
         "const lines = [",
@@ -200,11 +200,10 @@ export default defineWorkflow({
         "for (const row of top) {",
         '  lines.push("- " + String(row.slug || "unknown") + " | score=" + String(row.score || 0) + " | ratio=" + String(row.vol_liq_ratio || 0))',
         "}",
-        'await fs.promises.writeFile("/workspace/outputs/final.md", lines.join("\n"))',
+        'await fs.promises.writeFile("/workspace/scratch/final.md", lines.join("\n"))',
         "",
-        'export default { wrote: true, submissionPath: "/workspace/outputs/polymarket_signal_scanner_submission.json", summaryPath: "/workspace/outputs/final.md" }',
+        'export default { wrote: true, submissionPath: "/workspace/scratch/polymarket_signal_scanner_submission.json", summaryPath: "/workspace/scratch/final.md" }',
       ].join("\n"),
     },
   ],
 })
-

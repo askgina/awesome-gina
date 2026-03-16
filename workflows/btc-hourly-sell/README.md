@@ -33,7 +33,7 @@ Workflow submission with artifact at `workflows/btc-hourly-sell/references/btc-h
 
 ## What it does
 
-- Reads BTC hourly state from `/workspace/outputs/btc_hourly`.
+- Reads BTC hourly state from `/workspace/scratch/btc_hourly`.
 - Resolves held side and `conditionId` from the state file.
 - Force-sells matching position shares near expiry with retries.
 - Clears state file only after confirmed sell/stop/no-position outcomes.
@@ -49,7 +49,7 @@ Workflow submission with artifact at `workflows/btc-hourly-sell/references/btc-h
 - Side effects:
   - places aggressive sell orders
   - reads current positions for share size
-  - truncates `/workspace/outputs/btc_hourly` on successful cleanup path
+  - truncates `/workspace/scratch/btc_hourly` on successful cleanup path
 - Failure modes:
   - missing or malformed state file
   - no active BTC hourly market in lookup step

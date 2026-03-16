@@ -37,7 +37,7 @@ Workflow submission with artifact at `workflows/btc-hourly-sl/references/btc-hou
 - Checks current BTC hourly market probabilities.
 - Enters when exactly one side is in configured entry band.
 - Monitors open state and exits when held-side probability drops below stop-loss threshold.
-- Persists state in `/workspace/outputs/btc_hourly` for cross-run continuity.
+- Persists state in `/workspace/scratch/btc_hourly` for cross-run continuity.
 
 ## Capability contract
 
@@ -54,7 +54,7 @@ Workflow submission with artifact at `workflows/btc-hourly-sl/references/btc-hou
 - Side effects:
   - places buy/sell prediction trades
   - reads positions for share reconciliation
-  - writes `/workspace/outputs/btc_hourly`
+  - writes `/workspace/scratch/btc_hourly`
 - Failure modes:
   - market lookup failure for current BTC hourly market
   - trade placement errors (FOK, balance, allowance)
@@ -82,7 +82,7 @@ Workflow submission with artifact at `workflows/btc-hourly-sl/references/btc-hou
 
 - Requires market/position reads and real order execution rights.
 - Uses force-execution market orders; apply strict account risk limits.
-- Writes local state file under `/workspace/outputs/`.
+- Writes local state file under `/workspace/scratch/`.
 
 ## Evidence
 

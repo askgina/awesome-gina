@@ -1,4 +1,4 @@
-import defineWorkflow from "/workspace/tools/workflow/defineWorkflow"
+import defineWorkflow from "/runtime/tools/workflow/defineWorkflow"
 
 export default defineWorkflow({
   version: 1,
@@ -27,12 +27,12 @@ export default defineWorkflow({
         'const rows = Array.isArray(raw) ? raw : []',
         "",
         'await fs.promises.writeFile(',
-        '  "/workspace/outputs/polymarket_raw.json",',
+        '  "/workspace/scratch/polymarket_raw.json",',
         '  JSON.stringify(rows, null, 2)',
         ')',
         "",
         'await exec("sql query \'DROP TABLE IF EXISTS polymarket_raw\'")',
-        'await exec("sql register polymarket_raw /workspace/outputs/polymarket_raw.json --replace")',
+        'await exec("sql register polymarket_raw /workspace/scratch/polymarket_raw.json --replace")',
         "",
         'export default { fetched: rows.length, table: "polymarket_raw" }',
       ].join("\n"),
@@ -101,7 +101,7 @@ export default defineWorkflow({
         "  droppedCount = Array.from(prevSet).filter((slug) => !snapshot.slugs.includes(slug)).length",
         "}",
         "const result = { dedupedCount: deduped.length, thinBookCount: thinBooks.length, newCount, droppedCount, thinBooks: thinBooks.slice(0, 50) }",
-        'await fs.promises.writeFile("/workspace/outputs/polymarket_scan_result.json", JSON.stringify(result, null, 2))',
+        'await fs.promises.writeFile("/workspace/scratch/polymarket_scan_result.json", JSON.stringify(result, null, 2))',
         "export default result",
       ].join("\n"),
     },
@@ -112,7 +112,7 @@ export default defineWorkflow({
       depends_on: ["dedup_and_flag"],
       timeout: 15000,
       code: [
-        'const raw = await fs.promises.readFile("/workspace/outputs/polymarket_scan_result.json", "utf8").catch(() => null)',
+        'const raw = await fs.promises.readFile("/workspace/scratch/polymarket_scan_result.json", "utf8").catch(() => null)',
         "let output",
         "if (!raw) {",
         '  output = { wroteSummary: false, reason: "missing-scan-result" }',
@@ -126,7 +126,7 @@ export default defineWorkflow({
         '    "- Newly observed slugs: " + String(result.newCount || 0),',
         '    "- Dropped slugs since previous snapshot: " + String(result.droppedCount || 0),',
         "  ]",
-        '  await fs.promises.writeFile("/workspace/outputs/final.md", lines.join("\n"))',
+        '  await fs.promises.writeFile("/workspace/scratch/final.md", lines.join("\n"))',
         '  output = { wroteSummary: true }',
         "}",
         "export default output",

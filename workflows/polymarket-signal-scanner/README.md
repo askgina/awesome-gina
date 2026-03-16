@@ -53,7 +53,7 @@ Workflow submission with a concrete artifact at workflows/polymarket-signal-scan
   - submission artifact JSON plus human-readable summary markdown
 - Side effects:
   - reads market data via fetchPolymarketData
-  - writes run artifacts under /workspace/outputs/
+  - writes run artifacts under /workspace/scratch/
   - writes KV snapshots under polymarket-signal-scanner:
 - Failure modes:
   - upstream market-tool timeout or malformed payload

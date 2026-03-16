@@ -1,9 +1,9 @@
-import defineWorkflow from "/workspace/tools/workflow/defineWorkflow";
+import defineWorkflow from "/runtime/tools/workflow/defineWorkflow";
 
 // ============================================
 // CONFIGURATION
 // ============================================
-const STATE_FILE = "/workspace/outputs/btc_hourly";
+const STATE_FILE = "/workspace/scratch/btc_hourly";
 // ============================================
 
 export default defineWorkflow({
@@ -11,7 +11,7 @@ export default defineWorkflow({
   id: "btc-hourly-sell",
   name: "BTC Hourly Force Sell",
   description: "Force close any BTC hourly position at expiry, delete state file.",
-  stateFiles: ["/workspace/outputs/btc_hourly"],
+  stateFiles: ["/workspace/scratch/btc_hourly"],
   inputs: [],
   steps: [
     {
@@ -19,7 +19,7 @@ export default defineWorkflow({
       type: "ts",
       code: `
 // Read state file and get side from it - no position query needed
-const stateFile = "/workspace/outputs/btc_hourly";
+const stateFile = "/workspace/scratch/btc_hourly";
 
 let fileExists = false;
 let state: any = null;
@@ -189,7 +189,7 @@ export default result;
 const rawSell = steps.force_sell?.result;
 const sellResult = rawSell?.result ?? rawSell;
 
-const stateFile = "/workspace/outputs/btc_hourly";
+const stateFile = "/workspace/scratch/btc_hourly";
 const action = sellResult?.action;
 
 let result;
