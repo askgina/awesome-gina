@@ -1,4 +1,4 @@
-import defineWorkflow from "/workspace/tools/workflow/defineWorkflow"
+import defineWorkflow from "/runtime/tools/workflow/defineWorkflow"
 
 export default defineWorkflow({
   version: 1,
