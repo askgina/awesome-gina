@@ -20,12 +20,26 @@ export default defineWorkflow({
       type: "ts",
       allow: ["getHyperliquidAccount", "getHyperliquidPositions", "getHyperliquidOpenOrders"],
       code: `
+const unwrap = (value) => {
+  if (value && typeof value === "object" && "data" in value) return value.data;
+  return value;
+};
+const parseUniverse = (value) =>
+  String(value ?? "")
+    .split(",")
+    .map((item) => item.trim().toUpperCase())
+    .filter(Boolean);
 const [account, positions, openOrders] = await Promise.all([
   callTool("getHyperliquidAccount", {}),
   callTool("getHyperliquidPositions", {}),
-  callTool("getHyperliquidOpenOrders", {})
-])
-export default { account, positions, openOrders }
+  callTool("getHyperliquidOpenOrders", {}),
+]);
+export default {
+  account: unwrap(account),
+  positions: unwrap(positions),
+  openOrders: unwrap(openOrders),
+  allowedCoins: parseUniverse(inputs.coinUniverse),
+};
 `
     },
     {
@@ -33,21 +47,39 @@ export default { account, positions, openOrders }
       type: "ts",
       depends_on: ["fetch_emergency_state"],
       code: `
-const raw = steps.fetch_emergency_state?.result
-const state = raw?.result ?? raw ?? {}
-const operatorAck = String(inputs.operatorAck ?? "").trim()
+const state = steps.fetch_emergency_state?.result ?? {};
+const operatorAck = String(inputs.operatorAck ?? "").trim();
+const dryRun = Boolean(inputs.dryRun);
+const flattenAll = Boolean(inputs.flattenAll);
+const allowedCoins = Array.isArray(state.allowedCoins) ? state.allowedCoins : [];
+const inScope = (coin) => flattenAll || allowedCoins.length === 0 || allowedCoins.includes(coin);
+
+const positions = (Array.isArray(state.positions?.positions) ? state.positions.positions : Array.isArray(state.positions) ? state.positions : [])
+  .map((position) => ({
+    coin: String(position.coin ?? position.asset ?? "").toUpperCase(),
+    side: String(position.side ?? "").toLowerCase().includes("short") ? "short" : "long",
+    size: Math.abs(Number(position.size ?? position.szi ?? 0)),
+  }))
+  .filter((position) => position.coin && position.size > 0 && inScope(position.coin));
+
+const orders = (Array.isArray(state.openOrders?.orders) ? state.openOrders.orders : Array.isArray(state.openOrders) ? state.openOrders : [])
+  .map((order) => ({
+    orderId: order.orderId ?? order.oid ?? order.id ?? null,
+    coin: String(order.coin ?? order.asset ?? "").toUpperCase(),
+  }))
+  .filter((order) => order.orderId !== null && inScope(order.coin));
+
 export default {
-  dryRun: Boolean(inputs.dryRun),
-  flattenAll: Boolean(inputs.flattenAll),
+  dryRun,
+  flattenAll,
   operatorAckPresent: operatorAck.length > 0,
-  coinUniverse: String(inputs.coinUniverse ?? ""),
-  stateSummary: {
-    hasAccount: Boolean(state.account),
-    hasPositions: Boolean(state.positions),
-    hasOpenOrders: Boolean(state.openOrders),
-  },
-  flattenPlan: "Kill-switch flatten plan placeholder",
-}
+  orderCancels: orders,
+  positionCloses: positions.map((position) => ({
+    coin: position.coin,
+    side: position.side === "long" ? "sell" : "buy",
+    size: Number(position.size.toFixed(6)),
+  })),
+};
 `
     },
     {
@@ -56,18 +88,43 @@ export default {
       depends_on: ["build_flatten_plan"],
       allow: ["cancelHyperliquidOrder", "placeHyperliquidOrder"],
       code: `
-const raw = steps.build_flatten_plan?.result
-const plan = raw?.result ?? raw ?? {}
-if (plan.dryRun || !plan.operatorAckPresent) {
-  export default { executed: false, dryRun: true, canceledOrders: [], flattenedPositions: [] }
+const plan = steps.build_flatten_plan?.result ?? {};
+if (
+  plan.dryRun ||
+  !plan.operatorAckPresent ||
+  ((plan.orderCancels?.length ?? 0) === 0 && (plan.positionCloses?.length ?? 0) === 0)
+) {
+  export default {
+    executed: false,
+    dryRun: Boolean(plan.dryRun),
+    canceledOrders: [],
+    flattenedPositions: [],
+  };
 }
-export default {
-  executed: true,
-  dryRun: false,
-  canceledOrders: [],
-  flattenedPositions: [],
-  note: "Execution scaffold for emergency order cancel and flatten sequence",
+
+const canceledOrders = [];
+for (const order of plan.orderCancels ?? []) {
+  const result = await callTool("cancelHyperliquidOrder", {
+    orderId: order.orderId,
+    coin: order.coin,
+  });
+  canceledOrders.push({ ...order, result });
 }
+
+const flattenedPositions = [];
+for (const position of plan.positionCloses ?? []) {
+  const result = await callTool("placeHyperliquidOrder", {
+    coin: position.coin,
+    side: position.side,
+    orderType: "market",
+    size: String(position.size),
+    reduceOnly: true,
+    slippage: 0.05,
+  });
+  flattenedPositions.push({ ...position, result });
+}
+
+export default { executed: true, dryRun: false, canceledOrders, flattenedPositions };
 `
     },
     {
@@ -75,9 +132,16 @@ export default {
       type: "ts",
       depends_on: ["execute_flatten"],
       code: `
-const raw = steps.execute_flatten?.result
-const execution = raw?.result ?? raw ?? {}
-export default { persisted: true, execution }
+const execution = steps.execute_flatten?.result ?? {};
+export default {
+  persisted: true,
+  summary: {
+    canceledCount: Array.isArray(execution.canceledOrders) ? execution.canceledOrders.length : 0,
+    flattenedCount: Array.isArray(execution.flattenedPositions)
+      ? execution.flattenedPositions.length
+      : 0,
+  },
+};
 `
     }
   ]

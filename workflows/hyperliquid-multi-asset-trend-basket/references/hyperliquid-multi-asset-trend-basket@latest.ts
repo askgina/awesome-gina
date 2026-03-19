@@ -28,13 +28,38 @@ export default defineWorkflow({
         "fetchHyperliquidOrderBook"
       ],
       code: `
+const parseUniverse = (value) =>
+  String(value ?? "")
+    .split(",")
+    .map((item) => item.trim().toUpperCase())
+    .filter(Boolean);
+const unwrap = (value) => {
+  if (value && typeof value === "object" && "data" in value) return value.data;
+  return value;
+};
+const universe = parseUniverse(inputs.coinUniverse);
 const [account, positions, openOrders, prices] = await Promise.all([
   callTool("getHyperliquidAccount", {}),
   callTool("getHyperliquidPositions", {}),
   callTool("getHyperliquidOpenOrders", {}),
-  callTool("getHyperliquidPrices", {})
-])
-export default { account, positions, openOrders, prices, universe: String(inputs.coinUniverse ?? "") }
+  callTool("getHyperliquidPrices", { coins: universe }),
+]);
+const marketContext = [];
+for (const coin of universe) {
+  const [candles, orderBook] = await Promise.all([
+    callTool("fetchHyperliquidCandles", { coin, interval: String(inputs.interval ?? "4h") }),
+    callTool("fetchHyperliquidOrderBook", { coin, depth: 5 }),
+  ]);
+  marketContext.push({ coin, candles: unwrap(candles), orderBook: unwrap(orderBook) });
+}
+export default {
+  account: unwrap(account),
+  positions: unwrap(positions),
+  openOrders: unwrap(openOrders),
+  prices: unwrap(prices),
+  universe,
+  marketContext,
+};
 `
     },
     {
@@ -42,16 +67,67 @@ export default { account, positions, openOrders, prices, universe: String(inputs
       type: "ts",
       depends_on: ["scan_universe"],
       code: `
-const raw = steps.scan_universe?.result
-const state = raw?.result ?? raw ?? {}
+const state = steps.scan_universe?.result ?? {};
+const toNumber = (value, fallback = 0) => {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+};
+const accountValue = Math.max(
+  toNumber(state.account?.accountValue ?? state.account?.balance ?? 0),
+  1,
+);
+const maxPositions = Math.max(Math.floor(toNumber(inputs.maxPositions, 3)), 1);
+const riskPctPerPosition = Math.max(toNumber(inputs.riskPctPerPosition, 0.0075), 0.001);
+const dryRun = Boolean(inputs.dryRun);
+const existingPositions = Array.isArray(state.positions?.positions)
+  ? state.positions.positions
+  : Array.isArray(state.positions)
+    ? state.positions
+    : [];
+
+const ranked = (Array.isArray(state.marketContext) ? state.marketContext : [])
+  .map((item) => {
+    const candles = Array.isArray(item.candles) ? item.candles : [];
+    const closes = candles.map((candle) => toNumber(candle.close, 0)).filter((value) => value > 0);
+    const lastClose = closes.at(-1) ?? 0;
+    const avgClose =
+      closes.length > 0
+        ? closes.reduce((total, value) => total + value, 0) / closes.length
+        : 0;
+    const momentum = avgClose > 0 ? (lastClose - avgClose) / avgClose : 0;
+    const side = momentum >= 0 ? "buy" : "sell";
+    const orderBook = item.orderBook ?? {};
+    const bids = Array.isArray(orderBook.bids) ? orderBook.bids : [];
+    const asks = Array.isArray(orderBook.asks) ? orderBook.asks : [];
+    const bestBid = toNumber(bids[0]?.price, lastClose);
+    const bestAsk = toNumber(asks[0]?.price, lastClose);
+    const spreadPct = bestAsk > 0 ? Math.max(0, (bestAsk - bestBid) / bestAsk) : 0;
+    const desiredNotionalUsd = accountValue * riskPctPerPosition;
+    const size = lastClose > 0 ? desiredNotionalUsd / lastClose : 0;
+    const existing = existingPositions.find(
+      (position) => String(position.coin ?? position.asset ?? "").toUpperCase() === item.coin,
+    );
+    return {
+      coin: item.coin,
+      side,
+      momentum: Number(momentum.toFixed(4)),
+      spreadPct: Number(spreadPct.toFixed(4)),
+      size: Number(size.toFixed(6)),
+      flipRequired:
+        existing &&
+        String(existing.side ?? "").toLowerCase().includes(side === "buy" ? "short" : "long"),
+    };
+  })
+  .sort((a, b) => Math.abs(b.momentum) - Math.abs(a.momentum))
+  .slice(0, maxPositions);
+
 export default {
-  dryRun: Boolean(inputs.dryRun),
+  dryRun,
   interval: String(inputs.interval ?? "4h"),
-  maxPositions: Number(inputs.maxPositions ?? 3),
-  riskPctPerPosition: Number(inputs.riskPctPerPosition ?? 0.0075),
-  universe: state.universe ?? "",
-  basketPlan: "Multi-asset trend basket selection placeholder",
-}
+  maxPositions,
+  riskPctPerPosition,
+  basketPlan: ranked,
+};
 `
     },
     {
@@ -60,17 +136,35 @@ export default {
       depends_on: ["select_basket"],
       allow: ["cancelHyperliquidOrder", "placeHyperliquidOrder", "placeHyperliquidStopOrder"],
       code: `
-const raw = steps.select_basket?.result
-const plan = raw?.result ?? raw ?? {}
-if (plan.dryRun) {
-  export default { executed: false, dryRun: true, basketOrders: [] }
+const plan = steps.select_basket?.result ?? {};
+const basketPlan = Array.isArray(plan.basketPlan) ? plan.basketPlan : [];
+
+if (plan.dryRun || basketPlan.length === 0) {
+  export default { executed: false, dryRun: Boolean(plan.dryRun), basketOrders: [] };
 }
-export default {
-  executed: true,
-  dryRun: false,
-  basketOrders: [],
-  note: "Execution scaffold for multi-asset basket entries and stops",
+
+const basketOrders = [];
+for (const item of basketPlan) {
+  const entryResult = await callTool("placeHyperliquidOrder", {
+    coin: item.coin,
+    side: item.side,
+    orderType: "market",
+    size: String(item.size),
+    reduceOnly: false,
+    slippage: 0.04,
+  });
+  const stopSide = item.side === "buy" ? "sell" : "buy";
+  const stopResult = await callTool("placeHyperliquidStopOrder", {
+    coin: item.coin,
+    side: stopSide,
+    size: String(item.size),
+    triggerPrice: String(item.side === "buy" ? 0.97 : 1.03),
+    triggerType: "stop_loss",
+  });
+  basketOrders.push({ coin: item.coin, entryResult, stopResult });
 }
+
+export default { executed: true, dryRun: false, basketOrders };
 `
     },
     {
@@ -78,9 +172,11 @@ export default {
       type: "ts",
       depends_on: ["execute_basket"],
       code: `
-const raw = steps.execute_basket?.result
-const execution = raw?.result ?? raw ?? {}
-export default { persisted: true, execution }
+const execution = steps.execute_basket?.result ?? {};
+export default {
+  persisted: true,
+  basketOrderCount: Array.isArray(execution.basketOrders) ? execution.basketOrders.length : 0,
+};
 `
     }
   ]

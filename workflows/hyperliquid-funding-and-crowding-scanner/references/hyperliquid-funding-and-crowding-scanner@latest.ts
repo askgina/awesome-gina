@@ -26,13 +26,32 @@ export default defineWorkflow({
         "fetchHyperliquidOrderBook"
       ],
       code: `
-const [assetData, positions, openOrders, prices] = await Promise.all([
-  callTool("getHyperliquidAssetData", {}),
-  callTool("getHyperliquidPositions", {}),
-  callTool("getHyperliquidOpenOrders", {}),
-  callTool("getHyperliquidPrices", {})
-])
-export default { assetData, positions, openOrders, prices }
+const parseUniverse = (value) =>
+  String(value ?? "")
+    .split(",")
+    .map((item) => item.trim().toUpperCase())
+    .filter(Boolean);
+const unwrap = (value) => {
+  if (value && typeof value === "object" && "data" in value) return value.data;
+  return value;
+};
+const universe = parseUniverse(inputs.coinUniverse);
+const positions = unwrap(await callTool("getHyperliquidPositions", {}));
+const openOrders = unwrap(await callTool("getHyperliquidOpenOrders", {}));
+const prices = unwrap(await callTool("getHyperliquidPrices", { coins: universe }));
+const markets = [];
+for (const coin of universe) {
+  const [assetData, orderBook] = await Promise.all([
+    callTool("getHyperliquidAssetData", { coin }),
+    callTool("fetchHyperliquidOrderBook", { coin, depth: 10 }),
+  ]);
+  markets.push({
+    coin,
+    assetData: unwrap(assetData),
+    orderBook: unwrap(orderBook),
+  });
+}
+export default { universe, positions, openOrders, prices, markets };
 `
     },
     {
@@ -40,21 +59,53 @@ export default { assetData, positions, openOrders, prices }
       type: "ts",
       depends_on: ["fetch_market_context"],
       code: `
-const raw = steps.fetch_market_context?.result
-const state = raw?.result ?? raw ?? {}
+const state = steps.fetch_market_context?.result ?? {};
+const topN = Math.max(Math.floor(Number(inputs.topN ?? 10)), 1);
+const maxSpreadPct = Math.max(Number(inputs.maxSpreadPct ?? 0.008), 0.001);
+const positionCoins = new Set(
+  (Array.isArray(state.positions?.positions) ? state.positions.positions : Array.isArray(state.positions) ? state.positions : [])
+    .map((position) => String(position.coin ?? position.asset ?? "").toUpperCase()),
+);
+
+const watchlist = (Array.isArray(state.markets) ? state.markets : [])
+  .map((market) => {
+    const bids = Array.isArray(market.orderBook?.bids) ? market.orderBook.bids : [];
+    const asks = Array.isArray(market.orderBook?.asks) ? market.orderBook.asks : [];
+    const bestBid = Number(bids[0]?.price ?? 0);
+    const bestAsk = Number(asks[0]?.price ?? 0);
+    const spreadPct = bestAsk > 0 ? Math.max(0, (bestAsk - bestBid) / bestAsk) : 0;
+    const fundingRate = Number(
+      market.assetData?.fundingRate ??
+        market.assetData?.funding ??
+        market.assetData?.carryRate ??
+        0,
+    );
+    const leverage = Number(market.assetData?.leverage ?? 0);
+    const score =
+      Math.abs(fundingRate) * 1000 +
+      spreadPct * 200 +
+      (spreadPct > maxSpreadPct ? 15 : 0) +
+      leverage;
+    return {
+      coin: market.coin,
+      fundingRate: Number(fundingRate.toFixed(6)),
+      spreadPct: Number(spreadPct.toFixed(4)),
+      leverage,
+      heldPosition: positionCoins.has(market.coin),
+      score: Number(score.toFixed(2)),
+      crowdingBias:
+        fundingRate > 0 ? "crowded_longs" : fundingRate < 0 ? "crowded_shorts" : "neutral",
+    };
+  })
+  .sort((a, b) => b.score - a.score)
+  .slice(0, topN);
+
 export default {
-  topN: Number(inputs.topN ?? 10),
-  maxSpreadPct: Number(inputs.maxSpreadPct ?? 0.008),
+  topN,
+  maxSpreadPct,
   snapshotPrefix: String(inputs.snapshotPrefix ?? "hyperliquid-funding-crowding:"),
-  stateSummary: {
-    hasAssetData: Boolean(state.assetData),
-    hasPositions: Boolean(state.positions),
-    hasOpenOrders: Boolean(state.openOrders),
-    hasPrices: Boolean(state.prices),
-  },
-  watchlist: [],
-  note: "Funding-and-crowding scoring scaffold",
-}
+  watchlist,
+};
 `
     },
     {
@@ -62,9 +113,15 @@ export default {
       type: "ts",
       depends_on: ["score_crowding"],
       code: `
-const raw = steps.score_crowding?.result
-const result = raw?.result ?? raw ?? {}
-export default { wroteArtifacts: true, result }
+const result = steps.score_crowding?.result ?? {};
+export default {
+  wroteArtifacts: true,
+  shortlistCount: Array.isArray(result.watchlist) ? result.watchlist.length : 0,
+  summary:
+    Array.isArray(result.watchlist) && result.watchlist.length > 0
+      ? result.watchlist[0].coin + " ranked highest for crowding review"
+      : "No ranked crowding candidates",
+};
 `
     }
   ]
