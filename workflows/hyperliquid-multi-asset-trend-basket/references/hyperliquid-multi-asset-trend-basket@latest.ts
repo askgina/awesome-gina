@@ -79,6 +79,10 @@ const accountValue = Math.max(
 const maxPositions = Math.max(Math.floor(toNumber(inputs.maxPositions, 3)), 1);
 const riskPctPerPosition = Math.max(toNumber(inputs.riskPctPerPosition, 0.0075), 0.001);
 const dryRun = Boolean(inputs.dryRun);
+const livePrices =
+  state.prices && typeof state.prices === "object" && "prices" in state.prices
+    ? state.prices.prices
+    : state.prices ?? {};
 const existingPositions = Array.isArray(state.positions?.positions)
   ? state.positions.positions
   : Array.isArray(state.positions)
@@ -90,6 +94,7 @@ const ranked = (Array.isArray(state.marketContext) ? state.marketContext : [])
     const candles = Array.isArray(item.candles) ? item.candles : [];
     const closes = candles.map((candle) => toNumber(candle.close, 0)).filter((value) => value > 0);
     const lastClose = closes.at(-1) ?? 0;
+    const referencePrice = toNumber(livePrices?.[item.coin], lastClose);
     const avgClose =
       closes.length > 0
         ? closes.reduce((total, value) => total + value, 0) / closes.length
@@ -99,11 +104,11 @@ const ranked = (Array.isArray(state.marketContext) ? state.marketContext : [])
     const orderBook = item.orderBook ?? {};
     const bids = Array.isArray(orderBook.bids) ? orderBook.bids : [];
     const asks = Array.isArray(orderBook.asks) ? orderBook.asks : [];
-    const bestBid = toNumber(bids[0]?.price, lastClose);
-    const bestAsk = toNumber(asks[0]?.price, lastClose);
+    const bestBid = toNumber(bids[0]?.price, referencePrice);
+    const bestAsk = toNumber(asks[0]?.price, referencePrice);
     const spreadPct = bestAsk > 0 ? Math.max(0, (bestAsk - bestBid) / bestAsk) : 0;
     const desiredNotionalUsd = accountValue * riskPctPerPosition;
-    const size = lastClose > 0 ? desiredNotionalUsd / lastClose : 0;
+    const size = referencePrice > 0 ? desiredNotionalUsd / referencePrice : 0;
     const existing = existingPositions.find(
       (position) => String(position.coin ?? position.asset ?? "").toUpperCase() === item.coin,
     );
@@ -113,6 +118,7 @@ const ranked = (Array.isArray(state.marketContext) ? state.marketContext : [])
       momentum: Number(momentum.toFixed(4)),
       spreadPct: Number(spreadPct.toFixed(4)),
       size: Number(size.toFixed(6)),
+      referencePrice: Number(referencePrice.toFixed(6)),
       flipRequired:
         existing &&
         String(existing.side ?? "").toLowerCase().includes(side === "buy" ? "short" : "long"),
@@ -145,6 +151,9 @@ if (plan.dryRun || basketPlan.length === 0) {
 
 const basketOrders = [];
 for (const item of basketPlan) {
+  const stopTriggerPrice = Number(
+    (Number(item.referencePrice ?? 0) * (item.side === "buy" ? 0.97 : 1.03)).toFixed(4),
+  );
   const entryResult = await callTool("placeHyperliquidOrder", {
     coin: item.coin,
     side: item.side,
@@ -158,7 +167,7 @@ for (const item of basketPlan) {
     coin: item.coin,
     side: stopSide,
     size: String(item.size),
-    triggerPrice: String(item.side === "buy" ? 0.97 : 1.03),
+    triggerPrice: String(stopTriggerPrice),
     triggerType: "stop_loss",
   });
   basketOrders.push({ coin: item.coin, entryResult, stopResult });

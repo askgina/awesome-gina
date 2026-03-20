@@ -150,6 +150,12 @@ for (const position of Array.isArray(state.positions) ? state.positions : []) {
 
   if (actionType === "hold") continue;
 
+  const stopSize = Number(position.size.toFixed(6));
+  const reductionSize =
+    actionType === "flatten"
+      ? stopSize
+      : Number((position.size * Math.min(maxReductionPct, 0.35)).toFixed(6));
+
   actions.push({
     coin: position.coin,
     actionType,
@@ -157,10 +163,8 @@ for (const position of Array.isArray(state.positions) ? state.positions : []) {
     reduceOnly: true,
     spreadPct: Number(spreadPct.toFixed(4)),
     liquidationBufferPct: Number(liquidationBufferPct.toFixed(4)),
-    reduceSize:
-      actionType === "flatten"
-        ? Number(position.size.toFixed(6))
-        : Number((position.size * Math.min(maxReductionPct, 0.35)).toFixed(6)),
+    stopSize,
+    reduceSize: reductionSize,
     desiredStopPrice:
       position.side === "long"
         ? Number((position.markPrice * (1 - minLiquidationBufferPct)).toFixed(2))
@@ -203,7 +207,7 @@ for (const action of actions) {
     const stopResult = await callTool("placeHyperliquidStopOrder", {
       coin: action.coin,
       side: action.side,
-      size: String(action.reduceSize),
+      size: String(action.stopSize ?? action.reduceSize),
       triggerPrice: String(action.desiredStopPrice),
       triggerType: "stop_loss",
     });
