@@ -91,7 +91,7 @@ Create a scheduled recipe:
 - Schedule: 0 9 * * *
 - Timezone: my scheduler's local timezone
 - Task: Track the key assets in my portfolio as well as the broader crypto market and send me a neat news report of the top events that may impact my portfolio and the industry.
-- Amount/rules: Run every day at 9:00 AM local time; prioritize the assets that matter most in my portfolio; include both asset-specific and market-wide developments; keep the summary concise but explain why each event matters.
+- Amount/rules: Prioritize the assets that matter most in my portfolio; include both asset-specific and market-wide developments; keep the summary concise but explain why each event matters.
 
 Then return:
 - Ready-to-run recipe config

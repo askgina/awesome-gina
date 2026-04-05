@@ -86,8 +86,8 @@ Create a scheduled recipe:
 - Execute with agent: gina (spot)
 - Schedule: 0 9 * * *
 - Timezone: my scheduler's local timezone
-- Task: Generate a Daily Crypto Market Activity Report. Identify the top 5 tokens across Ethereum, Solana, and Base networks by 24-hour trading volume. For each of the top 5 tokens, provide token name and symbol, current price in USD, 24-hour trading volume in USD, liquidity in USD, and 24-hour price change in percent. For each token, provide a brief actionable recommendation for a potential profit-making strategy. Present the report clearly in a table format.
-- Amount/rules: Run every day at 9:00 AM local time; rank by 24-hour volume in USD across Ethereum, Solana, and Base; include exactly 5 tokens; keep recommendations brief and actionable for spot trading.
+- Task: Generate a Crypto Market Activity Report. Identify the top 5 tokens across Ethereum, Solana, and Base networks by 24-hour trading volume. For each of the top 5 tokens, provide token name and symbol, current price in USD, 24-hour trading volume in USD, liquidity in USD, and 24-hour price change in percent. For each token, provide a brief actionable recommendation for a potential profit-making strategy. Present the report clearly in a table format.
+- Amount/rules: Rank by 24-hour volume in USD across Ethereum, Solana, and Base; include exactly 5 tokens; keep recommendations brief and actionable for spot trading.
 
 Then return:
 - Ready-to-run recipe config
