@@ -85,12 +85,12 @@ Generates a neat morning portfolio report with total AUM, bucketed balances, and
 ~~~text
 promptText:
 Create a scheduled recipe:
-- Name: Morning Portfolio Report
+- Name: Portfolio Report
 - Execute with agent: gina
 - Schedule: 0 9 * * *
 - Timezone: my scheduler's local timezone
-- Task: Get all assets in my portfolio and create a neat morning report with total AUM in USD, my top assets and their 24-hour performance, and a balance breakdown for spot, predictions, and perps. Sum the balances into a clear grand total and make the report easy to scan.
-- Amount/rules: Run every day at 9:00 AM local time; report in USD; exclude dust balances from the top-assets section; include exact subtotals for spot, predictions, perps, and total portfolio value.
+- Task: Get all assets in my portfolio and create a neat portfolio report with total AUM in USD, my top assets and their 24-hour performance, and a balance breakdown for spot, predictions, and perps. Sum the balances into a clear grand total and make the report easy to scan.
+- Amount/rules: Report in USD; exclude dust balances from the top-assets section; include exact subtotals for spot, predictions, perps, and total portfolio value.
 
 Then return:
 - Ready-to-run recipe config

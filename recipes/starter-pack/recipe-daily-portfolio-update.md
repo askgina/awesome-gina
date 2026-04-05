@@ -84,12 +84,12 @@ Generates a concise morning portfolio summary covering AUM, large-asset moves, a
 ~~~text
 promptText:
 Create a scheduled recipe:
-- Name: Daily Portfolio Update
+- Name: Portfolio Update
 - Execute with agent: gina (spot)
 - Schedule: 0 9 * * *
 - Timezone: my scheduler's local timezone
 - Task: Give me a breakdown of my portfolio with total AUM in $, top movements on large assets (up or down %), and any relevant news related to my top holdings.
-- Amount/rules: Run every day at 9:00 AM local time; report in USD; focus on the largest holdings by USD value; keep the summary concise and useful.
+- Amount/rules: Report in USD; focus on the largest holdings by USD value; keep the summary concise and useful.
 
 Then return:
 - Ready-to-run recipe config

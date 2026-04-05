@@ -88,8 +88,8 @@ Create a scheduled recipe:
 - Execute with agent: gina
 - Schedule: 0 9 * * *
 - Timezone: my scheduler's local timezone
-- Task: Get the top trending markets on Polymarket across commodities, finance, politics, crypto, culture, and other relevant categories. Synthesize them into a daily forward-looking news report on what is becoming more likely or less likely based on market odds.
-- Amount/rules: Run every day at 9:00 AM local time; use trending markets from multiple categories; prioritize liquid and active markets; translate odds into plain-English takeaways; call out uncertainty when the signal is thin or noisy.
+- Task: Get the top trending markets on Polymarket across commodities, finance, politics, crypto, culture, and other relevant categories. Synthesize them into a forward-looking news report on what is becoming more likely or less likely based on market odds.
+- Amount/rules: Use trending markets from multiple categories; prioritize liquid and active markets; translate odds into plain-English takeaways; call out uncertainty when the signal is thin or noisy.
 
 Then return:
 - Ready-to-run recipe config
