@@ -7,6 +7,7 @@ Up: [Awesome Gina Index](../../README.md)
 - [Polymarket Market Hygiene Scan Workflow](../../workflows/polymarket-market-hygiene-scan/README.md) - Scan active markets, deduplicate event variants, and flag thin liquidity books.
 - [Polymarket Signal Scanner Workflow](../../workflows/polymarket-signal-scanner/README.md) - Scan active Polymarket markets, rank high-signal candidates, and track shortlist deltas.
 - [Hyperliquid Funding and Crowding Scanner Workflow](../../workflows/hyperliquid-funding-and-crowding-scanner/README.md) - Scan Hyperliquid books, asset metadata, and held exposure for crowding, spread, and funding-pressure signals.
+- [NBA Matchup Edge Report Workflow](../../workflows/nba-matchup-edge-report/README.md) - Build the daily NBA matchup edge markdown report used by the downstream executor.
 
 ## Trading
 
