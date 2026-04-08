@@ -26,6 +26,9 @@ evidence:
   setup: recipes/predictions/recipe-btc-hourly-force-sell.md#setup
   example: recipes/predictions/recipe-btc-hourly-force-sell.md#evidence
 tags: [btc, hourly, sell, recipe, predictions]
+relationships:
+  strategyIds:
+    - strategy-btc-hourly-entry-stop-loss
 ---
 
 # BTC Hourly Force Sell

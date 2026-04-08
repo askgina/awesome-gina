@@ -1,9 +1,9 @@
 ---
 id: hyperliquid-position-guardian
 slug: hyperliquid-position-guardian
-name: Hyperliquid Position Guardian Workflow
+name: Position Risk Watcher Workflow
 type: workflow
-summary: Watch Hyperliquid positions for liquidation-distance, spread, and stop-health breaches and cut risk when needed.
+summary: Watch Hyperliquid positions for liquidation, spread, and stop-health risk and cut exposure when needed.
 category: workflows/trading
 status: experimental
 owner: askgina
@@ -28,10 +28,10 @@ security:
 evidence:
   setup: workflows/hyperliquid-position-guardian/README.md#setup
   example: null
-tags: [workflows, trading, hyperliquid, guardrails, liquidation, stop-loss]
+tags: [workflows, trading, hyperliquid, guardrails, liquidation, stop-loss, executes-trades]
 ---
 
-# Hyperliquid Position Guardian Workflow
+# Position Risk Watcher Workflow
 
 Workflow submission with artifact at `workflows/hyperliquid-position-guardian/references/hyperliquid-position-guardian@latest.ts`.
 

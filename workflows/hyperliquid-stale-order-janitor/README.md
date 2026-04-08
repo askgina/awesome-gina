@@ -1,9 +1,9 @@
 ---
 id: hyperliquid-stale-order-janitor
 slug: hyperliquid-stale-order-janitor
-name: Hyperliquid Stale Order Janitor Workflow
+name: Stale Order Cleanup Workflow
 type: workflow
-summary: Cancel orphaned, duplicate, and stale Hyperliquid orders that no longer match live exposure.
+summary: Cancel stale, duplicate, and orphaned Hyperliquid orders that no longer match live exposure.
 category: workflows/trading
 status: experimental
 owner: askgina
@@ -25,10 +25,10 @@ security:
 evidence:
   setup: workflows/hyperliquid-stale-order-janitor/README.md#setup
   example: null
-tags: [workflows, trading, hyperliquid, stale-orders, cleanup, ops]
+tags: [workflows, trading, hyperliquid, stale-orders, cleanup, ops, order-management]
 ---
 
-# Hyperliquid Stale Order Janitor Workflow
+# Stale Order Cleanup Workflow
 
 Workflow submission with artifact at `workflows/hyperliquid-stale-order-janitor/references/hyperliquid-stale-order-janitor@latest.ts`.
 

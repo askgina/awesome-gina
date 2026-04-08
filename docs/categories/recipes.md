@@ -25,6 +25,10 @@ Up: [Awesome Gina Index](../../README.md)
 - [BTC Hourly Force Sell](../../recipes/predictions/recipe-btc-hourly-force-sell.md) - Force-sell residual BTC hourly position at :59 each hour (UTC).
 - [Hourly Hey Heartbeat](../../recipes/predictions/recipe-hourly-hey-heartbeat.md) - Send a heartbeat hey message at :52 hourly (Europe/London).
 
+## Daily Sports
+
+- [NBA Matchup Edge Executor](../../recipes/daily-sports/recipe-nba-matchup-edge-executor.md) - Read the daily NBA edge report at 4:30 PM Europe/London, place 5 USD qualifying bets, and delete the report file.
+
 ## Perps
 
 - No curated perps recipes yet.

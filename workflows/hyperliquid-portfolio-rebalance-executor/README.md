@@ -1,9 +1,9 @@
 ---
 id: hyperliquid-portfolio-rebalance-executor
 slug: hyperliquid-portfolio-rebalance-executor
-name: Hyperliquid Portfolio Rebalance Executor Workflow
+name: Portfolio Rebalancer Workflow
 type: workflow
-summary: Execute bounded leverage and concentration trims from a Hyperliquid portfolio rebalance plan.
+summary: Trim Hyperliquid exposure back toward target leverage and concentration bands.
 category: workflows/trading
 status: experimental
 owner: askgina
@@ -28,10 +28,10 @@ security:
 evidence:
   setup: workflows/hyperliquid-portfolio-rebalance-executor/README.md#setup
   example: null
-tags: [workflows, trading, hyperliquid, rebalance, leverage, portfolio]
+tags: [workflows, trading, hyperliquid, rebalance, leverage, portfolio, executes-trades]
 ---
 
-# Hyperliquid Portfolio Rebalance Executor Workflow
+# Portfolio Rebalancer Workflow
 
 Workflow submission with artifact at `workflows/hyperliquid-portfolio-rebalance-executor/references/hyperliquid-portfolio-rebalance-executor@latest.ts`.
 

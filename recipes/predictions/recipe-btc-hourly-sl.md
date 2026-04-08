@@ -27,6 +27,9 @@ evidence:
   setup: recipes/predictions/recipe-btc-hourly-sl.md#setup
   example: recipes/predictions/recipe-btc-hourly-sl.md#evidence
 tags: [btc, hourly, stop-loss, recipe, predictions]
+relationships:
+  strategyIds:
+    - strategy-btc-hourly-entry-stop-loss
 ---
 
 # BTC Hourly SL

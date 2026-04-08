@@ -1,9 +1,9 @@
 ---
 id: hyperliquid-trailing-stop-maintainer
 slug: hyperliquid-trailing-stop-maintainer
-name: Hyperliquid Trailing Stop Maintainer Workflow
+name: Auto Trailing Stops Workflow
 type: workflow
-summary: Move and repair protective stops for open Hyperliquid positions using configurable trailing rules.
+summary: Move and repair Hyperliquid protective stops using configurable trailing rules.
 category: workflows/trading
 status: experimental
 owner: askgina
@@ -26,10 +26,10 @@ security:
 evidence:
   setup: workflows/hyperliquid-trailing-stop-maintainer/README.md#setup
   example: null
-tags: [workflows, trading, hyperliquid, trailing-stop, risk-management]
+tags: [workflows, trading, hyperliquid, trailing-stop, risk-management, order-management]
 ---
 
-# Hyperliquid Trailing Stop Maintainer Workflow
+# Auto Trailing Stops Workflow
 
 Workflow submission with artifact at `workflows/hyperliquid-trailing-stop-maintainer/references/hyperliquid-trailing-stop-maintainer@latest.ts`.
 
