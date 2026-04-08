@@ -27,6 +27,9 @@ relationships:
   recipeIds:
     - recipe-btc-hourly-sl
     - recipe-btc-hourly-force-sell
+  workflowIds:
+    - btc-hourly-sl
+    - btc-hourly-sell
 evidence:
   setup: strategies/trading/strategy-btc-hourly-entry-stop-loss.md#setup
   example: strategies/trading/strategy-btc-hourly-entry-stop-loss.md#evidence
