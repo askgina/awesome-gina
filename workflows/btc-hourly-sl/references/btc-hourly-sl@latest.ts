@@ -1,4 +1,4 @@
-import defineWorkflow from "/runtime/tools/workflow/defineWorkflow";
+import defineWorkflow from "/runtime/tools/workflow/defineWorkflow.ts";
 
 // ============================================
 // CONFIGURATION
@@ -7,7 +7,7 @@ const STAKE_USD = 5;
 const ENTRY_MIN_PROB = 0.80;
 const ENTRY_MAX_PROB = 0.97;
 const SL_PROB_THRESHOLD = 0.72;
-const STATE_FILE = "/workspace/scratch/btc_hourly";
+const STATE_FILE = "/workspace/outputs/btc_hourly";
 // ============================================
 
 export default defineWorkflow({
@@ -15,7 +15,7 @@ export default defineWorkflow({
   id: "btc-hourly-sl",
   name: "BTC Hourly with Stop-Loss",
   description: "Entry at 80-97% prob, SL exit if held side drops below 72%.",
-  stateFiles: ["/workspace/scratch/btc_hourly"],
+  stateFiles: ["/workspace/outputs/btc_hourly"],
   inputs: [
     { name: "stakeUsd", type: "number", default: STAKE_USD },
     { name: "entryMinProb", type: "number", default: ENTRY_MIN_PROB },
@@ -28,7 +28,7 @@ export default defineWorkflow({
       type: "ts",
       code: `
 // Check if state file exists and read current state
-const stateFile = "/workspace/scratch/btc_hourly";
+const stateFile = "/workspace/outputs/btc_hourly";
 
 let fileExists = false;
 let lastLine = "";
@@ -389,7 +389,7 @@ const tradeResult = rawTrade?.result ?? rawTrade;
 const rawEval = steps.evaluate_action?.result;
 const evalResult = rawEval?.result ?? rawEval;
 
-const stateFile = "/workspace/scratch/btc_hourly";
+const stateFile = "/workspace/outputs/btc_hourly";
 const now = new Date().toISOString();
 
 let result;
