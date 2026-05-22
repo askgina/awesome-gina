@@ -18,6 +18,7 @@ verification:
 security:
   permissions:
     - read-market-data
+    - read-public-web-data
     - manage-scheduled-prompts
     - place-prediction-trade
     - write-run-artifacts
@@ -107,7 +108,7 @@ Then return:
 
 ## Security and permissions
 
-- `security.permissions`: read-market-data, manage-scheduled-prompts, place-prediction-trade, write-run-artifacts, write-local-state-file.
+- `security.permissions`: read-market-data, read-public-web-data, manage-scheduled-prompts, place-prediction-trade, write-run-artifacts, write-local-state-file.
 - Live webhook mode is enabled by default in the imported payload. Set `dryRun: true` for setup tests.
 - Repeated rotator runs update the same managed child hooks instead of creating unmanaged duplicates.
 

@@ -18,6 +18,7 @@ verification:
 security:
   permissions:
     - read-market-data
+    - read-public-web-data
     - manage-scheduled-prompts
     - place-prediction-trade
     - write-local-state-file

@@ -1,9 +1,9 @@
 ---
 id: strategy-tradfi-sniper
-slug: strategy-tradfi-sniper
+slug: tradfi-sniper-strat
 name: TradFi Sniper Strat
 type: strategy
-summary: Bundle the TradFi Sniper rotator recipe and workflow for guarded daily TradFi prediction-market entries.
+summary: Rotate TradFi daily Up/Down Struct hooks and buy one qualifying 65-99% side per market.
 category: strategies/trading
 status: experimental
 owner: askgina
@@ -18,9 +18,9 @@ verification:
 security:
   permissions:
     - read-market-data
+    - read-public-web-data
     - manage-scheduled-prompts
     - place-prediction-trade
-    - write-run-artifacts
     - write-local-state-file
 relationships:
   recipeIds:
@@ -35,71 +35,63 @@ tags: [strategy, tradfi, predictions, polymarket, struct, close-to-bond]
 
 # TradFi Sniper Strat
 
-Strategy bundle for arming Struct watchers across daily TradFi Up/Down markets and entering only when the fired side passes the configured guards.
+Daily TradFi Up/Down strategy that separates scheduled watcher rotation from condition-scoped webhook execution.
 
 ## Bundle map
 
-- `recipe-tradfi-sniper-rotator` ([file](../../recipes/predictions/recipe-tradfi-sniper-rotator.md))
 - `tradfi-sniper` ([file](../../workflows/tradfi-sniper/README.md))
+- `recipe-tradfi-sniper-rotator` ([file](../../recipes/predictions/recipe-tradfi-sniper-rotator.md))
 
 ## Capability contract
 
 - Trigger:
-  - rotator recipe on cron `0 13-20 * * 1-5` in UTC
-  - Struct child watcher webhooks when a condition-scoped `close_to_bond` event fires
+  - rotator recipe at `0 13-20 * * 1-5` in UTC
+  - Struct webhook mode when a condition-scoped `close_to_bond` hook fires
 - Inputs:
-  - TradFi asset universe or `assetSymbols` subset
-  - probability bands for Up and Down outcomes
-  - optional `minPriceDeltaPct` gate
-  - notional and watcher TTL settings
+  - built-in TradFi daily asset universe or `assetSymbols` subset
+  - Up and Down probability bands, defaulting to 65-99%
+  - optional price-delta threshold versus price-to-beat
+  - fixed trade notional, defaulting to 10 USD
 - Outputs:
-  - watcher create/update summaries
-  - per-webhook skip, dry-run, buy, or failure result
-  - persisted market claim state for one-trade-per-market enforcement
+  - refreshed watcher inventory
+  - skipped asset diagnostics
+  - webhook trade, dry-run, or skip decision
 - Side effects:
-  - creates and updates managed scheduled prompts
-  - may place real prediction-market buy orders
-  - writes run artifacts and local trade-claim state
+  - creates and refreshes Struct watcher scheduled prompts
+  - places qualifying prediction trades
+  - writes one-trade-per-market claim state
 - Failure modes:
-  - no active markets during the scheduled scan
-  - market identity or price-source lookup failure
-  - Struct webhook mismatch against encoded guards
-  - duplicate market claim
-  - trade-tool rejection or insufficient balance
+  - market discovery or helper price-source failure
+  - Struct payload mismatch against encoded condition, event, or side
+  - no qualifying probability in the configured band
+  - market already claimed before the opposite side fires
+  - trade rejection after claim
 - Strategy state transitions:
-  - idle -> rotator-scan at each weekday hourly trigger
-  - rotator-scan -> watchers-armed after active market resolution
-  - watchers-armed -> webhook-evaluation when Struct fires
-  - webhook-evaluation -> bought after all guards pass and order execution succeeds
-  - webhook-evaluation -> skipped when probability, side, condition, price-delta, or claim guards fail
+  - idle -> rotation at each weekday UTC schedule tick
+  - rotation -> watching when asset/side hooks are refreshed
+  - watching -> webhook-evaluation when Struct fires a hook
+  - webhook-evaluation -> bought when guards pass and trade succeeds
+  - webhook-evaluation -> skipped when guards fail or market is already claimed
+  - bought or skipped -> waiting for next rotation
 
 ## Setup
 
-1. Install workflow artifact: `workflows/tradfi-sniper/references/tradfi-sniper@latest.ts`.
-2. Create the scheduled recipe from `recipes/predictions/recipe-tradfi-sniper-rotator.md`.
-3. Use agent `predictions` and cron `0 13-20 * * 1-5` in UTC.
-4. Confirm live-risk inputs before enabling:
-   - `dryRun=false`
-   - `notionalUsd=10`
-   - `minProbability=0.65`
-   - `maxProbability=0.99`
-   - `minNoProbability=0.65`
-   - `maxNoProbability=0.99`
-5. Use a small `assetSymbols` subset for setup checks before scanning the full universe.
+1. Install the workflow artifact from `workflows/tradfi-sniper/references/tradfi-sniper@latest.ts`.
+2. Create the rotator recipe from `recipes/predictions/recipe-tradfi-sniper-rotator.md`.
+3. Keep `managedBy: tradfi-sniper` so repeated runs refresh the same watcher family.
+4. Confirm prediction-trading limits before setting `dryRun: false`.
+5. Monitor `/workspace/outputs/tradfi_sniper_trades.json` when checking duplicate-side protection.
 
 ## Security and permissions
 
-- Requires scheduled-prompt management and real prediction-market trade permissions.
-- Child watchers are scoped to a single condition id and side.
-- One-trade-per-market state is fail-closed and blocks the opposite side after a claim.
-- Keep account-level risk controls aligned with `notionalUsd` and the number of selected assets.
+- Requires scheduled-prompt management and prediction-trading permission.
+- Uses exact condition/event/side guards before trading webhook payloads.
+- Claims are intentionally fail-closed to prevent buying both sides of the same market.
 
 ## Evidence
 
-- Recipe: `recipes/predictions/recipe-tradfi-sniper-rotator.md`
-- Workflow: `workflows/tradfi-sniper/README.md`
-- Source artifact: `workflows/tradfi-sniper/references/tradfi-sniper@latest.ts`
-- Rotator payload: `workflows/tradfi-sniper/references/tradfi-sniper-rotator.recipe.json`
+- `workflows/tradfi-sniper/references/tradfi-sniper@latest.ts`
+- `recipes/predictions/recipe-tradfi-sniper-rotator.md`
 
 ## Backlinks
 
