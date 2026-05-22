@@ -1,0 +1,41 @@
+{
+  "name": "TradFi Sniper Rotator",
+  "target": {
+    "kind": "workflow",
+    "workflowId": "tradfi-sniper",
+    "revision": "latest",
+    "inputs": {
+      "mode": "rotator",
+      "sniperName": "TradFi Sniper",
+      "assetSymbols": "",
+      "activeWindowMinutes": 0,
+      "minPriceDeltaPct": 0,
+      "minProbability": 0.65,
+      "maxProbability": 0.99,
+      "minNoProbability": 0.65,
+      "maxNoProbability": 0.99,
+      "notionalUsd": 10,
+      "watcherTtlMinutes": 1440,
+      "dryRun": false,
+      "managedBy": "tradfi-sniper"
+    }
+  },
+  "trigger": {
+    "type": "time_based",
+    "schedule": {
+      "pattern": "recurring",
+      "cronExpression": "0 13-20 * * 1-5",
+      "timezone": "UTC"
+    }
+  },
+  "metadata": {
+    "agent": {
+      "name": "predictions",
+      "strategy": "fixed"
+    },
+    "managedBy": "tradfi-sniper",
+    "workflowId": "tradfi-sniper",
+    "strategy": "tradfi_sniper_rotator",
+    "notes": "Runs hourly through the main daily TradFi market window on weekdays to arm or refresh Struct close_to_bond hooks for currently active daily assets. Hooks are capped by the market end time. Buys a side only while that side is in the configured 65-99% probability band. Set minPriceDeltaPct above 0 to require current price to be that percentage beyond price-to-beat."
+  }
+}

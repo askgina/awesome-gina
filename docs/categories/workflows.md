@@ -12,6 +12,7 @@ Up: [Awesome Gina Index](../../README.md)
 ## Trading
 
 - [Signal Prediction Stop-Loss v2 Workflow](../../workflows/signal-prediction-stoploss-v2/README.md) - Attempt 15m BTC signal trades and monitor filled positions with stop-loss logic.
+- [TradFi Sniper Workflow](../../workflows/tradfi-sniper/README.md) - Rotate Struct close_to_bond hooks for TradFi Up/Down markets and buy qualifying prediction outcomes.
 - [BTC Hourly Stop-Loss Workflow](../../workflows/btc-hourly-sl/README.md) - Run BTC hourly entry/stop-loss logic from :45 through :58 each hour (UTC).
 - [BTC Hourly Force Sell Workflow](../../workflows/btc-hourly-sell/README.md) - Force-close BTC hourly position at :59 each hour and clear state on confirmed exit.
 - [Daily Trend Reversal Workflow](../../workflows/hl-ha-daily-ema7-riskflip/README.md) - Trade daily Hyperliquid trend reversals with bounded sizing, stale-order cleanup, and protective stops.
