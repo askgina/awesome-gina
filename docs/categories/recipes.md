@@ -24,6 +24,7 @@ Up: [Awesome Gina Index](../../README.md)
 - [BTC Hourly SL](../../recipes/predictions/recipe-btc-hourly-sl.md) - Run BTC hourly entry and stop-loss checks from :45 through :58 each hour (UTC).
 - [BTC Hourly Force Sell](../../recipes/predictions/recipe-btc-hourly-force-sell.md) - Force-sell residual BTC hourly position at :59 each hour (UTC).
 - [Hourly Hey Heartbeat](../../recipes/predictions/recipe-hourly-hey-heartbeat.md) - Send a heartbeat hey message at :52 hourly (Europe/London).
+- [TradFi Sniper Rotator](../../recipes/predictions/recipe-tradfi-sniper-rotator.md) - Arm or refresh Struct close_to_bond watchers for configured TradFi daily Up/Down markets.
 
 ## Daily Sports
 
