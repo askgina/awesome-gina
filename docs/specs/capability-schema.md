@@ -144,6 +144,15 @@ Other docs should reference this section instead of redefining type semantics.
 - Markov-chain-like transition framing is acceptable when it improves clarity.
 - Recipes can be submitted as top-level entries and can also be referenced as implementation primitives inside strategy entries.
 
+## Diagram Guidance
+
+- Mermaid diagrams are recommended for `strategy`, `recipe`, and `workflow` entries when they make review easier. They are not a validation requirement.
+- Good strategy diagrams show bundle coordination, state transitions, decision gates, risk gates, and links between recipes/workflows.
+- Good recipe diagrams show schedule or trigger flow into runnable actions, default safety posture, and any handoff to workflow code.
+- Good workflow diagrams show orchestration branches, tool/service boundaries, state or artifact outputs, and blocked/failure paths.
+- Prefer `flowchart TD`, `stateDiagram-v2`, or `sequenceDiagram` based on what is clearest. Keep node labels short, public, and secret-free.
+- Do not use a diagram as a substitute for the required Trigger, Inputs, Outputs, Side effects, and Failure modes sections.
+
 ## Validation Rules
 
 Automated checks in

@@ -64,6 +64,12 @@ Required body content for `strategy`, `recipe`, `workflow`:
 - Side effects
 - Failure modes
 
+Recommended visual aids for `strategy`, `recipe`, and `workflow`:
+
+- Add a concise Mermaid diagram when it clarifies behavior that bullets make hard to scan.
+- Useful diagrams show state transitions, schedule-to-action flow, workflow branches, actor/service boundaries, data or artifact flow, risk gates, and failure paths.
+- Skip diagrams that merely restate the capability contract; keep labels brief and avoid secrets or user-specific values.
+
 ## 4) Validate Before PR
 
 Run:

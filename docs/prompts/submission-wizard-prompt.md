@@ -67,6 +67,7 @@ Rules:
 - For workflow layout conventions, use `skills/official/sandbox/workflows/SKILL.md` as reference.
 - If information is missing, offer constrained options and ask me to pick one.
 - For recipe submissions, include a `Quick Copy Prompt (Ask Gina)` section with a fenced `text` code block that begins with `promptText:` and includes `- Execute with agent: <gina (spot) | predictions | perps>` sourced from `lib/ai/agents/index.ts`.
+- For strategy, recipe, and workflow submissions, include a Mermaid diagram when it usefully explains state transitions, schedule-to-action flow, workflow branches, service/tool boundaries, artifact flow, risk gates, or failure paths. Skip it when it would only restate the bullets.
 
 Interaction format each round:
 1) "What I understood" (short)
@@ -87,6 +88,7 @@ Required fields to complete:
 - workflow source layout (for workflow): `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
+- diagram recommendation and optional Mermaid section (for strategy/recipe/workflow when useful)
 - quick-copy `promptText` block with enum execution agent line (for recipe)
 - interface summary + setup + side effects + permission scope (for skill/filesystem)
 - skill name/description + SKILL.md path (+ optional compatibility/allowed tools) for skill
@@ -109,6 +111,7 @@ My initial notes:
 - Reproducible setup and evidence.
 - Recipe submissions include a noob-friendly `Quick Copy Prompt (Ask Gina)` `promptText` block with an explicit enum execution agent line sourced from `lib/ai/agents/index.ts`.
 - Workflow submissions keep docs/artifacts under `workflows/<workflow-folder>/` with runnable source in `references/`.
+- Mermaid diagrams are present when they clarify behavior, and omitted when the entry is already clear without one.
 - Lane selection is explicit and path-consistent.
 - No secret leakage.
 - Missing fields listed clearly before finalization.
