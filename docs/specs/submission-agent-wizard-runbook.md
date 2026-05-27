@@ -68,6 +68,11 @@ For `strategy` and `recipe`, also capture strategy behavior:
 - strategy states
 - transition conditions (Markov-chain-like framing is acceptable)
 
+For `strategy`, `recipe`, and `workflow`, also evaluate whether a Mermaid diagram would help reviewers:
+
+- add one when it clarifies state transitions, schedule-to-action flow, workflow branches, actor/service boundaries, data or artifact flow, risk gates, or failure paths
+- skip it when it would only restate the written capability contract
+
 For `skill` and `filesystem`, require:
 
 - interface summary (commands/tools/files exposed)
@@ -120,6 +125,12 @@ Quality rules:
 - What states does the strategy move through?
 - What condition causes each transition?
 - What happens on uncertainty or missing data?
+
+### Step 3b: Diagram Need (Strategy/Recipe/Workflow)
+
+- Would a Mermaid diagram make the submission easier to review?
+- If yes, should it be a flowchart, state diagram, or sequence diagram?
+- What should the diagram show: schedule flow, state transitions, service/tool boundaries, artifacts, risk gates, or failure paths?
 
 ### Step 4: Security and Permissions
 
@@ -213,6 +224,7 @@ Required fields to complete:
 - workflow source layout (for workflow): `workflows/<workflow-folder>/README.md` + `workflows/<workflow-folder>/references/<artifact>@latest.ts`
 - trigger/inputs/outputs/sideEffects/failureModes (for strategy/recipe/workflow)
 - strategy states + transitions (for strategy/recipe when applicable)
+- diagram recommendation and optional Mermaid section (for strategy/recipe/workflow when useful)
 - interface summary + setup + side effects + permission scope (for skill/filesystem)
 - skill name/description + SKILL.md path (+ optional compatibility/allowed tools) for skill
 
@@ -234,6 +246,7 @@ My initial notes:
 - Final output conforms to the schema/template files above.
 - Prompt never routes users into unsupported submission types.
 - Strategy and recipe submissions include transition logic when relevant.
+- Strategy, recipe, and workflow submissions include useful Mermaid diagrams when they improve review clarity, and skip decorative diagrams.
 - Workflow submissions enforce the colocated directory pattern and path references resolve.
 - Lane selection is explicit and entry path matches lane intent.
 - Path selection is explicit and entry path matches the type-specific canonical location.
