@@ -4,6 +4,7 @@ Up: [Awesome Gina Index](../../README.md)
 
 ## Trading
 
+- [Weather Bond Rotator Strategy](../../strategies/trading/strategy-weather-bond-rotator.md) - Rotate weather close-to-bond watchers and keep order submission gated behind dry-run and proof controls.
 - [Daily BTC Markets Strat](../../strategies/trading/strategy-daily-btc-markets.md) - Bundle BTC daily entry, stop-loss, and daily terminal cleanup recipes.
 - [BTC Hourly Entry + Stop-Loss](../../strategies/trading/strategy-btc-hourly-entry-stop-loss.md) - Bundle BTC hourly entry checks, stop-loss monitoring, and minute-59 forced close into one strategy.
 - [Hourly Crypto Markets Strat](../../strategies/trading/strategy-hourly-crypto-markets.md) - Bundle hourly BTC/ETH/SOL/XRP entries with hourly cleanup recipes.

@@ -12,6 +12,7 @@ Up: [Awesome Gina Index](../../README.md)
 
 ## Predictions
 
+- [Weather Bond Rotator](../../recipes/predictions/recipe-weather-bond-rotator.md) - Refresh exact Polymarket weather close-to-bond watchers every two hours in dry-run mode by default.
 - [BTC Daily Buy (75-95 Odds)](../../recipes/predictions/recipe-btc-daily-buy-75-95.md) - Buy BTC daily side in the 75-95% band at 4:39 PM UTC.
 - [Daily BTC Stop Loss](../../recipes/predictions/recipe-daily-btc-stop-loss.md) - Stop-loss sell BTC Daily positions at $70 or below, checked :30 past 2-4 PM Europe/London.
 - [Daily Crypto Predictions Sell All](../../recipes/predictions/recipe-daily-crypto-predictions-sell-all.md) - Aggressively sell all prediction positions and redeem expired at 4:58 PM UTC.
