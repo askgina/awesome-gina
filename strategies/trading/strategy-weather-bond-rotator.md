@@ -43,6 +43,27 @@ Weather Bond Rotator is a conservative Polymarket weather-market strategy for ob
 - `recipe-weather-bond-rotator` ([file](../../recipes/predictions/recipe-weather-bond-rotator.md))
 - `weather-bond-rotator` ([workflow](../../workflows/weather-bond-rotator/README.md))
 
+## Strategy diagram
+
+```mermaid
+flowchart TD
+  A[Scheduled recipe] --> B[Weather Bond Rotator workflow]
+  B --> C[Exact Gamma weather series registry]
+  C --> D[Current daily city weather event]
+  D --> E[YES and NO close-to-bond candidates]
+  E --> F[Managed Struct watchers]
+  F --> G[close_to_bond webhook]
+  G --> H[Exact market and token proof]
+  H --> I[Orderbook and exposure gates]
+  I --> J{dryRun enabled}
+  J -->|yes| K[Dry-run order intent]
+  J -->|no and ready| L[Ready-to-trade intent]
+  I -->|gate failure| M[Blocked proof]
+  K --> N[Replayable state and live corpus]
+  L --> N
+  M --> N
+```
+
 ## Capability contract
 
 - Trigger:

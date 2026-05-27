@@ -78,6 +78,31 @@ Workflow submission with artifact at `workflows/weather-bond-rotator/references/
 6. Persist replayable proof to `/workspace/outputs/weather_bond_state.json` and `/workspace/outputs/weather_bond_live_corpus.json`.
 7. Return dry-run or blocked proof by default; submit an order only when explicitly armed and all gates pass.
 
+## Execution diagram
+
+```mermaid
+flowchart TD
+  A[Run workflow] --> B{mode}
+  B -->|rotator| C[Load enabled weather series]
+  C --> D[Fetch current event per series]
+  D --> E[Enumerate child markets and outcomes]
+  E --> F[Score and cap candidates]
+  F --> G[Create or update Struct watchers]
+  G --> H[Delete stale managed watchers]
+  H --> I[Write state artifact]
+
+  B -->|webhook| J[Validate Struct payload]
+  J --> K[Match allowed candidate]
+  K --> L[Resolve exact Polymarket market]
+  L --> M[Read current orderbook]
+  M --> N[Check idempotency and exposure]
+  N --> O{ready and dryRun false}
+  O -->|no| P[Return dry-run or blocked proof]
+  O -->|yes| Q[Submit trade intent]
+  P --> R[Write live corpus]
+  Q --> R
+```
+
 ## Setup
 
 1. Keep artifact at `workflows/weather-bond-rotator/references/weather-bond-rotator@latest.ts`.

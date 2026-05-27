@@ -78,6 +78,23 @@ Refreshes exact Gamma weather Struct close_to_bond watchers on a recurring sched
   - dry-run-ready -> blocked when identity, orderbook, or exposure gates fail
   - dry-run-ready -> ready-to-trade only when dryRun is false and all webhook readiness gates pass
 
+## Schedule diagram
+
+```mermaid
+flowchart TD
+  A[Cron: 7 */2 * * * Europe/London] --> B[Run weather-bond-rotator]
+  B --> C[Load enabled Gamma weather series]
+  C --> D[Find current event per series]
+  D --> E[Select YES and NO close-to-bond candidates]
+  E --> F[Create or update managed Struct watchers]
+  F --> G[Delete stale managed watchers]
+  G --> H[Write state and live-corpus artifacts]
+  H --> I{dryRun remains true}
+  I -->|yes| J[Dry-run proof only]
+  I -->|explicitly armed later| K[Webhook readiness gates required]
+  K --> L[Ready-to-trade or blocked intent]
+```
+
 ## Setup
 
 1. Install the workflow artifact from `workflows/weather-bond-rotator/references/weather-bond-rotator@latest.ts`.
