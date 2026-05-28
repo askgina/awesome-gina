@@ -63,6 +63,9 @@ Required body content for `strategy`, `recipe`, `workflow`:
 - Outputs
 - Side effects
 - Failure modes
+- Strategy-linked workflow READMEs must include a /create-compatible recurring
+  schedule line, such as
+  `- Trigger: recurring schedule \`7 */2 * * *\` in \`Europe/London\`.`
 
 Recommended visual aids for `strategy`, `recipe`, and `workflow`:
 
@@ -76,7 +79,8 @@ Run:
 
 - `ruby scripts/validate_primitives.rb`
 
-This validates primitive metadata and strategy/recipe/workflow ID references.
+This validates primitive metadata, strategy/recipe/workflow ID references, and
+/create-compatible recurring schedules for strategy-linked workflows.
 
 ## 5) Safety And Policy
 
