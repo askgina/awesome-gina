@@ -8,6 +8,16 @@ VALID_TYPES = %w[recipe strategy workflow].freeze
 VALID_VISIBILITY = %w[public unlisted private].freeze
 SEMVER_PATTERN = /\A\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?\z/
 SLUG_PATTERN = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
+CREATE_PAGE_WORKFLOW_TRIGGER_PATTERNS = [
+  /-\s*Trigger:\s*Recurring schedule\s*`([^`]+)`\s*\(([^)]+)\)/i,
+  /-\s*Trigger:\s*recurring schedule\s*`([^`]+)`\s*in\s*`([^`]+)`/i,
+  /-\s*Trigger:\s*Recurring schedule\s*`([^`]+)`\s*in\s*`([^`]+)`/i,
+  /-\s*Schedule(?: the workflow)?(?: for| at)?\s*`([^`]+)`\s*in\s*`([^`]+)`/i,
+  /-\s*Live schedule target:\s*`([^`]+)`\s*\(([^)]+)\)/i
+].freeze
+CRON_FIELD_PATTERN = /\A\S+(?:\s+\S+){4,}\z/
+CREATE_PAGE_TIMEZONE_PATTERN = /\A(?:UTC|GMT|[A-Za-z_]+(?:\/[A-Za-z0-9_+.-]+)+)\z/i
+CREATE_PAGE_SCHEDULE_EXAMPLE = '`- Trigger: recurring schedule `7 */2 * * *` in `Europe/London`.`'
 
 Entry = Struct.new(:path, :data, :id, :type, keyword_init: true)
 
@@ -43,6 +53,17 @@ def validate_url(url)
   %w[http https].include?(uri.scheme) && !uri.host.to_s.empty?
 rescue URI::InvalidURIError
   false
+end
+
+def create_page_workflow_schedule?(path)
+  content = File.read(path)
+  CREATE_PAGE_WORKFLOW_TRIGGER_PATTERNS.any? do |pattern|
+    match = content.match(pattern)
+    cron_expression = match&.[](1).to_s.strip
+    timezone = match&.[](2).to_s.strip
+
+    cron_expression.match?(CRON_FIELD_PATTERN) && timezone.match?(CREATE_PAGE_TIMEZONE_PATTERN)
+  end
 end
 
 errors = []
@@ -165,6 +186,11 @@ entries.each do |entry|
         errors << "#{entry.path}: strategy references missing workflow id `#{workflow_id}`"
       elsif target.type != "workflow"
         errors << "#{entry.path}: `#{workflow_id}` exists but is not a workflow"
+      elsif !create_page_workflow_schedule?(target.path)
+        errors << [
+          "#{target.path}: strategy-linked workflow must declare a /create-compatible recurring schedule,",
+          "for example #{CREATE_PAGE_SCHEDULE_EXAMPLE}"
+        ].join(" ")
       end
     end
   else

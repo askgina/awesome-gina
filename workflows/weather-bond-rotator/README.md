@@ -45,7 +45,7 @@ Workflow submission with artifact at `workflows/weather-bond-rotator/references/
 
 ## Capability contract
 
-- Trigger: manual or scheduled rotator runs, plus webhook mode for Struct `close_to_bond` callbacks.
+- Trigger: recurring schedule `7 */2 * * *` in `Europe/London` for rotator runs, plus webhook mode for Struct `close_to_bond` callbacks.
 - Inputs:
   - `mode` (`rotator` or `webhook`)
   - exact weather `seriesRegistry`
@@ -107,10 +107,11 @@ flowchart TD
 
 1. Keep artifact at `workflows/weather-bond-rotator/references/weather-bond-rotator@latest.ts`.
 2. Install as `/workspace/.harness/workflows/weather-bond-rotator@latest.ts`.
-3. Start with rotator mode and dry-run inputs:
+3. Schedule the workflow for `7 */2 * * *` in `Europe/London`.
+4. Start with rotator mode and dry-run inputs:
    - `{"mode":"rotator","dryRun":true,"notionalUsd":5,"marketSelectionMode":"current_event_all_markets"}`
-4. Configure Struct callbacks to run webhook mode only for managed candidates emitted by the rotator.
-5. Review state and live-corpus artifacts before changing `dryRun` to `false`.
+5. Configure Struct callbacks to run webhook mode only for managed candidates emitted by the rotator.
+6. Review state and live-corpus artifacts before changing `dryRun` to `false`.
 
 ## Security and permissions
 
